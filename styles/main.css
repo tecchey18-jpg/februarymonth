@@ -1,0 +1,609 @@
+/* ============================================
+   FEBRUARY CELEBRATION - PREMIUM DESIGN
+   ============================================ */
+
+/* ... (Keep existing basic resets or just overwrite with full new consistent file) ... */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+    --bg-dark: #0a0a0a;
+    --rose-red: #e63946;
+    --romantic-pink: #ff6b9d;
+    --gold: #ffd700;
+    --text-white: #ffffff;
+    --text-muted: rgba(255, 255, 255, 0.6);
+    --glass-bg: rgba(20, 20, 20, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-blur: blur(20px);
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --accent: var(--rose-red);
+    /* Default */
+}
+
+/* Base Reset */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-white);
+    height: 100vh;
+    overflow-y: scroll;
+    /* Enable scrolling */
+    scroll-snap-type: y mandatory;
+    /* Snap behavior */
+}
+
+/* Static Video Background */
+.video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    transform: translateZ(0);
+}
+
+.video-bg video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.6;
+}
+
+.video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.85));
+    z-index: -1;
+}
+
+/* Spacer for Video Only View */
+/* Spacer for Video Only View - REMOVED for No-Scroll Version */
+#hero {
+    display: none;
+    height: 100vh;
+    width: 100%;
+    scroll-snap-align: start;
+    position: relative;
+}
+
+/* Navigation */
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent);
+    transition: all 0.3s ease;
+}
+
+.nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.nav-logo:hover {
+    transform: scale(1.05) rotate(-2deg);
+}
+
+.nav-logo span {
+    font-size: 1.8rem;
+    filter: drop-shadow(0 0 5px var(--accent));
+}
+
+.nav-day {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.nav-calendar-btn {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: white;
+    font-size: 1.5rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.nav-calendar-btn:hover {
+    background: var(--accent);
+    transform: scale(1.1) rotate(10deg);
+    box-shadow: 0 0 20px var(--accent);
+    border-color: transparent;
+}
+
+/* Main Game Area */
+.app {
+    min-height: 100vh;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    position: relative;
+    scroll-snap-align: start;
+    /* Snap here */
+    perspective: 1000px;
+}
+
+.game {
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+
+    /* Emerging Animation State */
+    opacity: 0;
+    transform: translateY(150px) scale(0.7);
+    /* Deep "inside" look */
+    filter: blur(20px);
+    /* Heavy blur for depth */
+
+    /* Transition */
+    transition:
+        opacity 3.5s ease-out,
+        transform 3.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+        filter 3.5s ease-out;
+}
+
+/* Class to trigger the slide up */
+.game.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+}
+
+.game-emoji {
+    font-size: 6rem;
+    margin-bottom: 1rem;
+    animation: float 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px var(--accent));
+}
+
+.game-day-info {
+    margin-bottom: 2.5rem;
+    /* More breathing room */
+}
+
+.game-date {
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    /* Wider spacing for elegance */
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1rem;
+    /* Distinct separation */
+    display: block;
+}
+
+.game-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 4rem;
+    /* Larger */
+    font-weight: 700;
+    letter-spacing: -2px;
+    /* Tight modern look */
+    line-height: 1;
+    color: #ffffff;
+    /* pure white, no gradient */
+    text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    /* Deep shadow for pop */
+}
+
+.game-dialogue {
+    min-height: 120px;
+    margin-bottom: 2rem;
+}
+
+.game-text {
+    font-family: 'Outfit', sans-serif;
+    /* Changed from Playfair */
+    font-size: 1.8rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.game-subtext {
+    margin-top: 1rem;
+    font-size: 1rem;
+    opacity: 0.7;
+    font-weight: 400;
+}
+
+.game-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.game-btn {
+    padding: 1.2rem;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    color: white;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s var(--ease-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.game-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background: var(--accent);
+    z-index: -1;
+    transition: width 0.3s;
+}
+
+.game-btn:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.game-btn:hover::after {
+    width: 100%;
+}
+
+/* Reward Overlay */
+.reward-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s;
+}
+
+.reward-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.reward-card {
+    background: #1a1a1a;
+    border-radius: 20px;
+    overflow: hidden;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 0 50px var(--accent);
+    animation: slideUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+}
+
+.reward-image-container {
+    height: 300px;
+    position: relative;
+}
+
+.reward-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.reward-overlay-gradient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(to top, #1a1a1a, transparent);
+}
+
+.reward-content {
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+}
+
+.reward-emoji {
+    position: absolute;
+    top: -40px;
+    right: 20px;
+    font-size: 4rem;
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
+    animation: bounce 2s infinite;
+}
+
+.reward-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+.reward-message {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    opacity: 0.8;
+    margin-bottom: 2rem;
+}
+
+.reward-btn,
+.reward-replay-btn {
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    transition: transform 0.2s;
+}
+
+.reward-btn {
+    background: var(--accent);
+    color: white;
+}
+
+.reward-replay-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.reward-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Confetti */
+.confetti-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    animation: rain 3s linear forwards;
+}
+
+/* Calendar Panel */
+.calendar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 70vh;
+    background: #111;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px 20px 0 0;
+    transform: translateY(100%);
+    transition: transform 0.4s var(--ease-smooth);
+    z-index: 150;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.calendar.open {
+    transform: translateY(0);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.calendar-day:hover,
+.calendar-day.active {
+    background: var(--accent);
+    color: white;
+}
+
+.calendar-day .num {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.calendar-day .emoji {
+    font-size: 1.5rem;
+}
+
+/* Particles (Subtle background floating) */
+.particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.particle {
+    position: absolute;
+    animation: particleFloat 10s linear infinite;
+    opacity: 0.5;
+}
+
+/* Themes */
+.theme-romantic {
+    --accent: #e63946;
+}
+
+.theme-passionate {
+    --accent: #dc143c;
+}
+
+.theme-sweet {
+    --accent: #ff6b9d;
+}
+
+.theme-emotional {
+    --accent: #ffd700;
+}
+
+.theme-party {
+    --accent: #9d4edd;
+}
+
+.theme-fierce {
+    --accent: #ff4500;
+}
+
+.theme-sad {
+    --accent: #4a5568;
+}
+
+.theme-nostalgic {
+    --accent: #8b4513;
+}
+
+.theme-dreamy {
+    --accent: #c77dff;
+}
+
+.theme-fresh {
+    --accent: #20c997;
+}
+
+/* Animations */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes rain {
+    to {
+        transform: translateY(100vh) rotate(720deg);
+    }
+}
+
+@keyframes particleFloat {
+    0% {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-100px);
+        opacity: 0;
+    }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .game-title {
+        font-size: 2.5rem;
+    }
+
+    .game-text {
+        font-size: 1.5rem;
+    }
+
+    .calendar-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

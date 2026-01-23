@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a0a0a">
+
+    <!-- SEO -->
+    <title>February Celebration | 28 Days of Love</title>
+    <meta name="description"
+        content="Celebrate every day of February with romantic games, flirty conversations, and unforgettable moments. From Rose Day to Valentine's and beyond.">
+    <meta name="keywords" content="february, valentine, rose day, love, romance, games, celebration">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="February Celebration | 28 Days of Love">
+    <meta property="og:description" content="Experience 28 days of romantic conversations and playful games.">
+    <meta property="og:type" content="website">
+
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body class="theme-romantic">
+
+    <!-- Video Background -->
+    <div class="video-bg" id="video-bg">
+        <video autoplay muted loop playsinline>
+            <source
+                src="https://assets.mixkit.co/videos/preview/mixkit-red-rose-petals-falling-on-black-background-4027.mp4"
+                type="video/mp4">
+        </video>
+    </div>
+    <div class="video-overlay"></div>
+
+    <!-- Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="#" class="nav-logo">
+            <span>💕</span>
+            February
+        </a>
+        <div class="nav-day" id="nav-day">Feb 1 • Rose Day</div>
+        <button class="nav-calendar-btn" id="calendar-btn" aria-label="Open Calendar">
+            📅
+        </button>
+    </nav>
+
+    <!-- Hero Spacer (For initial video view) -->
+    <section id="hero"></section>
+
+    <!-- Main App -->
+    <main class="app">
+        <div class="game" id="game">
+            <!-- Game content loaded by JavaScript -->
+            <div class="game-emoji">🌹</div>
+
+            <div class="game-day-info">
+                <div class="game-date">February 1</div>
+                <div class="game-title">Rose Day</div>
+            </div>
+
+            <div class="game-dialogue">
+                <div class="game-text">"I brought you a rose. Will you accept it?"</div>
+                <div class="game-subtext">Be honest with me...</div>
+            </div>
+
+            <div class="game-buttons">
+                <button class="game-btn">Yes, I'd love to 💕</button>
+                <button class="game-btn">No thanks</button>
+                <button class="game-btn">Maybe...</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Calendar Panel -->
+    <div class="calendar" id="calendar">
+        <div class="calendar-header">
+            <h2 class="calendar-title">💕 February 2026</h2>
+            <button class="calendar-close" id="calendar-close" aria-label="Close Calendar">✕</button>
+        </div>
+
+        <div class="calendar-grid">
+            <!-- Weekday Headers -->
+            <div class="calendar-weekday">Sun</div>
+            <div class="calendar-weekday">Mon</div>
+            <div class="calendar-weekday">Tue</div>
+            <div class="calendar-weekday">Wed</div>
+            <div class="calendar-weekday">Thu</div>
+            <div class="calendar-weekday">Fri</div>
+            <div class="calendar-weekday">Sat</div>
+
+            <!-- February 2026 starts on Sunday -->
+            <!-- Day 1 - Rose Day -->
+            <div class="calendar-day active" data-day="1">
+                <span class="num">1</span>
+                <span class="emoji">🌹</span>
+            </div>
+            <!-- Day 2 - Propose Day -->
+            <div class="calendar-day" data-day="2">
+                <span class="num">2</span>
+                <span class="emoji">💍</span>
+            </div>
+            <!-- Day 3 - Chocolate Day -->
+            <div class="calendar-day" data-day="3">
+                <span class="num">3</span>
+                <span class="emoji">🍫</span>
+            </div>
+            <!-- Day 4 - Teddy Day -->
+            <div class="calendar-day" data-day="4">
+                <span class="num">4</span>
+                <span class="emoji">🧸</span>
+            </div>
+            <!-- Day 5 - Promise Day -->
+            <div class="calendar-day" data-day="5">
+                <span class="num">5</span>
+                <span class="emoji">🤝</span>
+            </div>
+            <!-- Day 6 - Hug Day -->
+            <div class="calendar-day" data-day="6">
+                <span class="num">6</span>
+                <span class="emoji">🤗</span>
+            </div>
+            <!-- Day 7 - Kiss Day -->
+            <div class="calendar-day" data-day="7">
+                <span class="num">7</span>
+                <span class="emoji">💋</span>
+            </div>
+            <!-- Day 8 - Valentine's Eve -->
+            <div class="calendar-day" data-day="8">
+                <span class="num">8</span>
+                <span class="emoji">🌃</span>
+            </div>
+            <!-- Day 9 - Valentine's Day -->
+            <div class="calendar-day" data-day="9">
+                <span class="num">9</span>
+                <span class="emoji">❤️</span>
+            </div>
+            <!-- Day 10 - Self-Love Day -->
+            <div class="calendar-day" data-day="10">
+                <span class="num">10</span>
+                <span class="emoji">💖</span>
+            </div>
+            <!-- Day 11 - Friendship Day -->
+            <div class="calendar-day" data-day="11">
+                <span class="num">11</span>
+                <span class="emoji">👯</span>
+            </div>
+            <!-- Day 12 - Flirt Day -->
+            <div class="calendar-day" data-day="12">
+                <span class="num">12</span>
+                <span class="emoji">😏</span>
+            </div>
+            <!-- Day 13 - Date Night Day -->
+            <div class="calendar-day" data-day="13">
+                <span class="num">13</span>
+                <span class="emoji">🌙</span>
+            </div>
+            <!-- Day 14 - Valentine's Redux -->
+            <div class="calendar-day" data-day="14">
+                <span class="num">14</span>
+                <span class="emoji">🎬</span>
+            </div>
+            <!-- Day 15 - Slap Day -->
+            <div class="calendar-day" data-day="15">
+                <span class="num">15</span>
+                <span class="emoji">👋</span>
+            </div>
+            <!-- Day 16 - Kick Day -->
+            <div class="calendar-day" data-day="16">
+                <span class="num">16</span>
+                <span class="emoji">👟</span>
+            </div>
+            <!-- Day 17 - Breakup Day -->
+            <div class="calendar-day" data-day="17">
+                <span class="num">17</span>
+                <span class="emoji">💔</span>
+            </div>
+            <!-- Day 18 - Patch-Up Day -->
+            <div class="calendar-day" data-day="18">
+                <span class="num">18</span>
+                <span class="emoji">🩹</span>
+            </div>
+            <!-- Day 19 - Missing Day -->
+            <div class="calendar-day" data-day="19">
+                <span class="num">19</span>
+                <span class="emoji">💭</span>
+            </div>
+            <!-- Day 20 - Confession Day -->
+            <div class="calendar-day" data-day="20">
+                <span class="num">20</span>
+                <span class="emoji">📱</span>
+            </div>
+            <!-- Day 21 - Forgive Day -->
+            <div class="calendar-day" data-day="21">
+                <span class="num">21</span>
+                <span class="emoji">🕊️</span>
+            </div>
+            <!-- Day 22 - Single's Day -->
+            <div class="calendar-day" data-day="22">
+                <span class="num">22</span>
+                <span class="emoji">🥂</span>
+            </div>
+            <!-- Day 23 - Glow-Up Day -->
+            <div class="calendar-day" data-day="23">
+                <span class="num">23</span>
+                <span class="emoji">✨</span>
+            </div>
+            <!-- Day 24 - Crush Day -->
+            <div class="calendar-day" data-day="24">
+                <span class="num">24</span>
+                <span class="emoji">🦋</span>
+            </div>
+            <!-- Day 25 - Chaos Love Day -->
+            <div class="calendar-day" data-day="25">
+                <span class="num">25</span>
+                <span class="emoji">🔥</span>
+            </div>
+            <!-- Day 26 - Destiny Day -->
+            <div class="calendar-day" data-day="26">
+                <span class="num">26</span>
+                <span class="emoji">🌠</span>
+            </div>
+            <!-- Day 27 - Eternal Love Day -->
+            <div class="calendar-day" data-day="27">
+                <span class="num">27</span>
+                <span class="emoji">♾️</span>
+            </div>
+            <!-- Day 28 - New Beginnings Day -->
+            <div class="calendar-day" data-day="28">
+                <span class="num">28</span>
+                <span class="emoji">🌅</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="src/days-config.js"></script>
+    <script src="src/app.js"></script>
+</body>
+
+</html>
