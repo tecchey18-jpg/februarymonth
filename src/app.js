@@ -87,25 +87,47 @@ class FebruaryApp {
         const videoContainer = document.getElementById('video-bg');
         if (!videoContainer) return;
 
-        // Remote URL from config
         const remoteUrl = this.dayConfig.videoUrl;
         const localUrl = `assets/videos/day-${this.currentDay}.mp4`;
 
-        // SIMPLIFIED LOGIC: Just replace the content.
-        // The fancy "seamless" stuff is likely causing memory leaks or decoder lag on your device.
-        videoContainer.innerHTML = `
-            <video autoplay muted loop playsinline id="bg-video">
+        // Strategy: Background Load & Swap
+        // 1. Create content but don't show it yet
+        const newWrapper = document.createElement('div');
+        newWrapper.style.position = 'absolute';
+        newWrapper.style.inset = '0';
+        newWrapper.style.opacity = '0'; // Hidden initially
+        newWrapper.style.transition = 'opacity 0.2s'; // Quick fade
+        newWrapper.style.zIndex = '2'; // Top
+
+        newWrapper.innerHTML = `
+            <video autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover;">
                 <source src="${localUrl}" type="video/mp4">
                 <source src="${remoteUrl}" type="video/mp4">
             </video>
             <div class="video-overlay"></div>
         `;
 
-        // Basic play safety
-        const video = videoContainer.querySelector('video');
+        videoContainer.appendChild(newWrapper);
+
+        const video = newWrapper.querySelector('video');
+
+        // 2. When ready, Show New -> Remove Old
+        const swap = () => {
+            newWrapper.style.opacity = '1';
+
+            // Remove old contents after short delay
+            setTimeout(() => {
+                Array.from(videoContainer.children).forEach(child => {
+                    if (child !== newWrapper) child.remove();
+                });
+            }, 300);
+        };
+
         if (video) {
-            video.classList.add('active'); // Show immediately
-            video.play().catch(() => { });  // Try to play
+            video.addEventListener('canplay', swap, { once: true });
+            // Safety timeout: if video is slow, valid fallback is keeping old video? 
+            // Or force swap? Let's force swap after 3s to stay responsive?
+            // User hates black screen, so waiting is better.
         }
     }
 
