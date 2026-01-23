@@ -95,7 +95,7 @@ class FebruaryApp {
         // Create new video element with fallback sources
         // Use rewardImage as poster so it looks good while loading or if blocked
         videoContainer.innerHTML = `
-            <video autoplay muted loop playsinline id="bg-video" poster="${this.dayConfig.rewardImage}">
+            <video autoplay muted loop playsinline id="bg-video">
                 <source src="${localUrl}" type="video/mp4">
                 <source src="${remoteUrl}" type="video/mp4">
             </video>
