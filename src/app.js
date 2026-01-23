@@ -90,57 +90,16 @@ class FebruaryApp {
         const remoteUrl = this.dayConfig.videoUrl;
         const localUrl = `assets/videos/day-${this.currentDay}.mp4`;
 
-        const newWrapper = document.createElement('div');
-        newWrapper.style.position = 'absolute';
-        newWrapper.style.top = '0';
-        newWrapper.style.left = '0';
-        newWrapper.style.width = '100%';
-        newWrapper.style.height = '100%';
-        newWrapper.style.opacity = '0'; // Start hidden
-        newWrapper.style.transition = 'opacity 0.5s ease-in-out';
-        newWrapper.style.zIndex = '0'; // Behind everything initially
-
-        // IMPORTANT: Explicit style on video to ensure it fills
-        newWrapper.innerHTML = `
-            <video autoplay muted loop playsinline style="width: 100%; height: 100%; object-fit: cover;">
+        // EXTREME SIMPLIFICATION:
+        // No wrappers. No swapping. No transitions.
+        // Just put the video there.
+        videoContainer.innerHTML = `
+            <video autoplay muted loop playsinline id="bg-video">
                 <source src="${localUrl}" type="video/mp4">
                 <source src="${remoteUrl}" type="video/mp4">
             </video>
             <div class="video-overlay"></div>
         `;
-
-        videoContainer.appendChild(newWrapper);
-
-        const video = newWrapper.querySelector('video');
-
-        const showNewVideo = () => {
-            // Force play just in case
-            if (video) video.play().catch(() => { });
-
-            // Show new video
-            newWrapper.style.opacity = '1';
-            newWrapper.style.zIndex = '1';
-
-            // Remove old videos
-            setTimeout(() => {
-                Array.from(videoContainer.children).forEach(child => {
-                    if (child !== newWrapper) child.remove();
-                });
-            }, 500);
-        };
-
-        if (video) {
-            video.addEventListener('canplay', showNewVideo, { once: true });
-
-            // CRITICAL: Force show after 1 second if event doesn't fire
-            // This prevents "permanent black screen"
-            setTimeout(() => {
-                if (newWrapper.style.opacity === '0') {
-                    console.warn("Forcing video show after timeout");
-                    showNewVideo();
-                }
-            }, 1000);
-        }
     }
 
     updateParticles() {
