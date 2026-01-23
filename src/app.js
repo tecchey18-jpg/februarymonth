@@ -89,7 +89,7 @@ class FebruaryApp {
 
         // Remote URL from config
         const remoteUrl = this.dayConfig.videoUrl;
-        // Local path (if downloaded)
+        // Local path
         const localUrl = `assets/videos/day-${this.currentDay}.mp4`;
 
         // Create NEW video element
@@ -98,40 +98,40 @@ class FebruaryApp {
         newVideo.muted = true;
         newVideo.loop = true;
         newVideo.playsInline = true;
-        newVideo.id = `bg-video-${this.currentDay}-${Date.now()}`; // Unique ID
+        newVideo.preload = 'auto'; // Force buffer ASAP
+        newVideo.id = `bg-video-${this.currentDay}-${Date.now()}`;
 
-        // Construct sources
         newVideo.innerHTML = `
             <source src="${localUrl}" type="video/mp4">
             <source src="${remoteUrl}" type="video/mp4">
         `;
 
-        // Append to container (initially invisible due to CSS)
         videoContainer.appendChild(newVideo);
 
-        // When video is ready to play, fade it in
+        // Instant Swap Logic (Performance > Fancy Transition)
         const handleVideoReady = () => {
+            // 1. Show new video immediately
             newVideo.classList.add('active');
 
-            // Clean up old videos after transition
+            // 2. PAUSE and REMOVE old videos instantly to free up decoder
             const oldVideos = Array.from(videoContainer.querySelectorAll('video')).filter(v => v !== newVideo);
-            setTimeout(() => {
-                oldVideos.forEach(v => v.remove());
-            }, 500); // Match CSS transition duration (faster cleanup)
+            oldVideos.forEach(v => {
+                v.pause(); // Critical: Stop decoding immediately
+                v.remove();
+            });
         };
 
-        // Listen for data to be loaded enough to play
-        newVideo.addEventListener('loadeddata', handleVideoReady, { once: true });
+        // 'canplay' fires sooner than 'loadeddata' usually
+        newVideo.addEventListener('canplay', handleVideoReady, { once: true });
 
-        // Fallback: If it's already ready (cached), trigger manually
+        // Fallback
         if (newVideo.readyState >= 3) {
             handleVideoReady();
         }
 
-        // Handle error/stuck loading - Force show after 3s if nothing else
+        // Timeout Fallback
         setTimeout(() => {
             if (!newVideo.classList.contains('active')) {
-                console.warn("Video load timeout, forcing display");
                 handleVideoReady();
             }
         }, 3000);
