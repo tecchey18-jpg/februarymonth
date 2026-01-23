@@ -604,10 +604,37 @@ body {
     }
 }
 
-/* Responsive */
-@media (max-width: 600px) {
+/* Responsive Design */
+
+/* Tablet (Landscape & Portrait) */
+@media (max-width: 1024px) {
+    .nav {
+        padding: 1rem 1.5rem;
+    }
+
+    .game-logo {
+        font-size: 3.5rem;
+    }
+
+    .calendar-grid {
+        grid-template-columns: repeat(4, 1fr);
+        /* Keep 4 for larger tablets */
+    }
+}
+
+/* Mobile Devices */
+@media (max-width: 768px) {
+    .nav-logo span {
+        font-size: 1.5rem;
+    }
+
+    .nav-day {
+        font-size: 0.8rem;
+        padding: 0.4rem 1rem;
+    }
+
     .game-title {
-        font-size: 2.5rem;
+        font-size: 3rem;
     }
 
     .game-text {
@@ -616,5 +643,79 @@ body {
 
     .calendar-grid {
         grid-template-columns: repeat(3, 1fr);
+        gap: 0.8rem;
+    }
+
+    .reward-card {
+        width: 95%;
+    }
+
+    .reward-image-container {
+        height: 250px;
+    }
+}
+
+/* Small Mobile (Phones) */
+@media (max-width: 480px) {
+    .nav {
+        padding: 1rem;
+    }
+
+    .nav-logo {
+        font-size: 1.2rem;
+    }
+
+    /* Hide Day text on very small screens if needed, or make smaller */
+    .nav-day {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.8rem;
+        letter-spacing: 1px;
+    }
+
+    .game-emoji {
+        font-size: 4.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .game-title {
+        font-size: 2.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .game-text {
+        font-size: 1.3rem;
+    }
+
+    .game-btn {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    .calendar {
+        height: 80vh;
+        /* Taller on mobile to see more */
+    }
+
+    .calendar-grid {
+        grid-template-columns: repeat(3, 1fr);
+        /* 3 cols still good for dates */
+        gap: 0.5rem;
+    }
+
+    .calendar-day {
+        border-radius: 8px;
+    }
+
+    .reward-image-container {
+        height: 200px;
+    }
+
+    .reward-emoji {
+        font-size: 3rem;
+        top: -30px;
+    }
+
+    .reward-title {
+        font-size: 1.8rem;
     }
 }
