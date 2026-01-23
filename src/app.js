@@ -92,28 +92,49 @@ class FebruaryApp {
         // Local path (if downloaded)
         const localUrl = `assets/videos/day-${this.currentDay}.mp4`;
 
-        // Create new video element with fallback sources
-        // Use rewardImage as poster so it looks good while loading or if blocked
-        videoContainer.innerHTML = `
-            <video autoplay muted loop playsinline id="bg-video">
-                <source src="${localUrl}" type="video/mp4">
-                <source src="${remoteUrl}" type="video/mp4">
-            </video>
-            <div class="video-overlay"></div>
+        // Create NEW video element
+        const newVideo = document.createElement('video');
+        newVideo.autoplay = true;
+        newVideo.muted = true;
+        newVideo.loop = true;
+        newVideo.playsInline = true;
+        newVideo.id = `bg-video-${this.currentDay}-${Date.now()}`; // Unique ID
+
+        // Construct sources
+        newVideo.innerHTML = `
+            <source src="${localUrl}" type="video/mp4">
+            <source src="${remoteUrl}" type="video/mp4">
         `;
 
-        // Force play attempt
-        const video = videoContainer.querySelector('video');
-        if (video) {
-            video.load(); // Reload to checking sources
-            const playPromise = video.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.log("Auto-play prevented (using poster):", error);
-                    // UI could show a "Play" button here if strict browser policy
-                });
-            }
+        // Append to container (initially invisible due to CSS)
+        videoContainer.appendChild(newVideo);
+
+        // When video is ready to play, fade it in
+        const handleVideoReady = () => {
+            newVideo.classList.add('active');
+
+            // Clean up old videos after transition
+            const oldVideos = Array.from(videoContainer.querySelectorAll('video')).filter(v => v !== newVideo);
+            setTimeout(() => {
+                oldVideos.forEach(v => v.remove());
+            }, 1500); // Match CSS transition duration
+        };
+
+        // Listen for data to be loaded enough to play
+        newVideo.addEventListener('loadeddata', handleVideoReady, { once: true });
+
+        // Fallback: If it's already ready (cached), trigger manually
+        if (newVideo.readyState >= 3) {
+            handleVideoReady();
         }
+
+        // Handle error/stuck loading - Force show after 3s if nothing else
+        setTimeout(() => {
+            if (!newVideo.classList.contains('active')) {
+                console.warn("Video load timeout, forcing display");
+                handleVideoReady();
+            }
+        }, 3000);
     }
 
     updateParticles() {
