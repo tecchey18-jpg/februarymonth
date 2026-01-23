@@ -347,8 +347,15 @@ class FebruaryApp {
         document.querySelectorAll('.calendar-day[data-day]').forEach(dayEl => {
             dayEl.addEventListener('click', () => {
                 const day = parseInt(dayEl.dataset.day);
-                this.loadDay(day);
+
+                // 1. Close Menu Immediately (Animates smoothly)
                 calendar.classList.remove('open');
+
+                // 2. Wait for animation to mostly finish before doing heavy work
+                // Use 400ms to match the CSS transition duration (0.4s)
+                setTimeout(() => {
+                    this.loadDay(day);
+                }, 400);
             });
         });
     }
