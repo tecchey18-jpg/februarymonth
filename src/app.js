@@ -348,14 +348,11 @@ class FebruaryApp {
             dayEl.addEventListener('click', () => {
                 const day = parseInt(dayEl.dataset.day);
 
-                // 1. Close Menu Immediately (Animates smoothly)
+                // 1. Close Menu Immediately
                 calendar.classList.remove('open');
 
-                // 2. Wait for animation to mostly finish before doing heavy work
-                // Use 400ms to match the CSS transition duration (0.4s)
-                setTimeout(() => {
-                    this.loadDay(day);
-                }, 400);
+                // 2. Load Day IMMEDIATETLY (User wants nanosecond response)
+                this.loadDay(day);
             });
         });
     }
