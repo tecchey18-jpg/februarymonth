@@ -64,6 +64,8 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center center;
+    /* Global center alignment for PC/Tablet */
     /* Removed opacity: 0 and transitions for reliability */
     z-index: 1;
 }
