@@ -117,7 +117,7 @@ class FebruaryApp {
             const oldVideos = Array.from(videoContainer.querySelectorAll('video')).filter(v => v !== newVideo);
             setTimeout(() => {
                 oldVideos.forEach(v => v.remove());
-            }, 1500); // Match CSS transition duration
+            }, 500); // Match CSS transition duration (faster cleanup)
         };
 
         // Listen for data to be loaded enough to play
