@@ -1,15 +1,5 @@
 {
   "name": "february-celebration",
   "version": "1.0.0",
-  "description": "February Celebration Website",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.18.2"
-  },
-  "engines": {
-    "node": ">=14.x"
-  }
+  "description": "February Celebration Website"
 }
