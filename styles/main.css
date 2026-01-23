@@ -653,6 +653,12 @@ body {
     .reward-image-container {
         height: 250px;
     }
+
+    /* Responsive Video: Center it better on portrait */
+    #video-bg video {
+        object-position: center center;
+        /* Ensure faces/action aren't cut off */
+    }
 }
 
 /* Small Mobile (Phones) */
