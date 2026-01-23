@@ -89,52 +89,24 @@ class FebruaryApp {
 
         // Remote URL from config
         const remoteUrl = this.dayConfig.videoUrl;
-        // Local path
         const localUrl = `assets/videos/day-${this.currentDay}.mp4`;
 
-        // Create NEW video element
-        const newVideo = document.createElement('video');
-        newVideo.autoplay = true;
-        newVideo.muted = true;
-        newVideo.loop = true;
-        newVideo.playsInline = true;
-        newVideo.preload = 'metadata'; // Load only metadata first to prevent lag
-        newVideo.id = `bg-video-${this.currentDay}-${Date.now()}`;
-
-        newVideo.innerHTML = `
-            <source src="${localUrl}" type="video/mp4">
-            <source src="${remoteUrl}" type="video/mp4">
+        // SIMPLIFIED LOGIC: Just replace the content.
+        // The fancy "seamless" stuff is likely causing memory leaks or decoder lag on your device.
+        videoContainer.innerHTML = `
+            <video autoplay muted loop playsinline id="bg-video">
+                <source src="${localUrl}" type="video/mp4">
+                <source src="${remoteUrl}" type="video/mp4">
+            </video>
+            <div class="video-overlay"></div>
         `;
 
-        videoContainer.appendChild(newVideo);
-
-        // Instant Swap Logic (Performance > Fancy Transition)
-        const handleVideoReady = () => {
-            // 1. Show new video immediately
-            newVideo.classList.add('active');
-
-            // 2. PAUSE and REMOVE old videos instantly to free up decoder
-            const oldVideos = Array.from(videoContainer.querySelectorAll('video')).filter(v => v !== newVideo);
-            oldVideos.forEach(v => {
-                v.pause(); // Critical: Stop decoding immediately
-                v.remove();
-            });
-        };
-
-        // 'canplay' fires sooner than 'loadeddata' usually
-        newVideo.addEventListener('canplay', handleVideoReady, { once: true });
-
-        // Fallback
-        if (newVideo.readyState >= 3) {
-            handleVideoReady();
+        // Basic play safety
+        const video = videoContainer.querySelector('video');
+        if (video) {
+            video.classList.add('active'); // Show immediately
+            video.play().catch(() => { });  // Try to play
         }
-
-        // Timeout Fallback
-        setTimeout(() => {
-            if (!newVideo.classList.contains('active')) {
-                handleVideoReady();
-            }
-        }, 3000);
     }
 
     updateParticles() {
