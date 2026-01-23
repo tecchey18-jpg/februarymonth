@@ -90,17 +90,19 @@ class FebruaryApp {
         const remoteUrl = this.dayConfig.videoUrl;
         const localUrl = `assets/videos/day-${this.currentDay}.mp4`;
 
-        // Strategy: Background Load & Swap
-        // 1. Create content but don't show it yet
         const newWrapper = document.createElement('div');
         newWrapper.style.position = 'absolute';
-        newWrapper.style.inset = '0';
-        newWrapper.style.opacity = '0'; // Hidden initially
-        newWrapper.style.transition = 'opacity 0.2s'; // Quick fade
-        newWrapper.style.zIndex = '2'; // Top
+        newWrapper.style.top = '0';
+        newWrapper.style.left = '0';
+        newWrapper.style.width = '100%';
+        newWrapper.style.height = '100%';
+        newWrapper.style.opacity = '0'; // Start hidden
+        newWrapper.style.transition = 'opacity 0.5s ease-in-out';
+        newWrapper.style.zIndex = '0'; // Behind everything initially
 
+        // IMPORTANT: Explicit style on video to ensure it fills
         newWrapper.innerHTML = `
-            <video autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover;">
+            <video autoplay muted loop playsinline style="width: 100%; height: 100%; object-fit: cover;">
                 <source src="${localUrl}" type="video/mp4">
                 <source src="${remoteUrl}" type="video/mp4">
             </video>
@@ -111,23 +113,33 @@ class FebruaryApp {
 
         const video = newWrapper.querySelector('video');
 
-        // 2. When ready, Show New -> Remove Old
-        const swap = () => {
-            newWrapper.style.opacity = '1';
+        const showNewVideo = () => {
+            // Force play just in case
+            if (video) video.play().catch(() => { });
 
-            // Remove old contents after short delay
+            // Show new video
+            newWrapper.style.opacity = '1';
+            newWrapper.style.zIndex = '1';
+
+            // Remove old videos
             setTimeout(() => {
                 Array.from(videoContainer.children).forEach(child => {
                     if (child !== newWrapper) child.remove();
                 });
-            }, 300);
+            }, 500);
         };
 
         if (video) {
-            video.addEventListener('canplay', swap, { once: true });
-            // Safety timeout: if video is slow, valid fallback is keeping old video? 
-            // Or force swap? Let's force swap after 3s to stay responsive?
-            // User hates black screen, so waiting is better.
+            video.addEventListener('canplay', showNewVideo, { once: true });
+
+            // CRITICAL: Force show after 1 second if event doesn't fire
+            // This prevents "permanent black screen"
+            setTimeout(() => {
+                if (newWrapper.style.opacity === '0') {
+                    console.warn("Forcing video show after timeout");
+                    showNewVideo();
+                }
+            }, 1000);
         }
     }
 
