@@ -98,7 +98,7 @@ class FebruaryApp {
         newVideo.muted = true;
         newVideo.loop = true;
         newVideo.playsInline = true;
-        newVideo.preload = 'auto'; // Force buffer ASAP
+        newVideo.preload = 'metadata'; // Load only metadata first to prevent lag
         newVideo.id = `bg-video-${this.currentDay}-${Date.now()}`;
 
         newVideo.innerHTML = `
