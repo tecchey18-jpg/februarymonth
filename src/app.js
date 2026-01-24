@@ -13,26 +13,110 @@ class FebruaryApp {
         this.init();
     }
 
-    getCurrentDay() {
-        const now = new Date();
-        const month = now.getMonth() + 1; // 0-indexed
-        const day = now.getDate();
-
-        // If February, use actual day; otherwise default to day 1 (Rose Day)
-        if (month === 2 && day >= 1 && day <= 28) {
-            return day;
-        }
-        return 1;
-    }
-
     init() {
         // Access globals from days-config.js
         this.config = typeof DAYS_CONFIG !== 'undefined' ? DAYS_CONFIG : {};
         this.denialPool = typeof DENIAL_POOL !== 'undefined' ? DENIAL_POOL : ["Please? 🥺"];
 
-        this.loadDay(this.currentDay);
-        this.setupEventListeners();
-        this.updateNavDate();
+        // Check if we need to show landing page (If not Feb, or forced for demo)
+        const isFeb = this.isFebruary();
+
+        this.setupEventListeners(); // Always setup listeners so nav works
+
+        if (!isFeb) {
+            this.initLandingPage();
+        } else {
+            document.getElementById('landing-page').style.display = 'none';
+            this.loadDay(this.currentDay);
+            this.updateNavDate();
+        }
+    }
+
+    isFebruary() {
+        // Strict check: Only return true if actual month is February
+        const now = new Date();
+        return now.getMonth() === 1; // 0-indexed (Jan=0, Feb=1)
+    }
+
+    initLandingPage() {
+        const landing = document.getElementById('landing-page');
+        const app = document.getElementById('app');
+        const enterBtn = document.getElementById('landing-enter-btn');
+        const realDateEl = document.getElementById('landing-date-real');
+        const febPreviewEl = document.getElementById('landing-feb-preview');
+        const holidayRow = document.getElementById('landing-holiday-row');
+        const holidayNameEl = document.getElementById('landing-holiday-name');
+
+        if (!landing || !enterBtn) return;
+
+        // 1. Show Landing, Hide App
+        landing.style.display = 'flex';
+        app.style.display = 'none';
+
+        // 2. Set Real Date
+        const now = new Date();
+        const options = { month: 'long', day: 'numeric' };
+        realDateEl.textContent = now.toLocaleDateString('en-US', options);
+
+        // 3. Calculate "February Equivalent" Preview
+        // Even if it's Jan 24, we show Feb 24 (Crush Day)
+        let previewDay = now.getDate();
+        if (previewDay > 28) previewDay = 28; // Cap at 28
+        if (previewDay < 1) previewDay = 1;
+
+        const previewConfig = this.config[previewDay];
+        if (previewConfig) {
+            febPreviewEl.textContent = `${previewConfig.emoji} ${previewConfig.name}`;
+        }
+
+        // 4. Check for Holidays / Special Observances (Simple manual map for key dates)
+        const month = now.getMonth(); // 0 = Jan
+        const day = now.getDate();
+
+        const holidays = {
+            "0-1": "New Year's Day",
+            "0-26": "Republic Day",
+            "2-8": "International Women's Day", // Mar 8
+            "7-15": "Independence Day", // Aug 15
+            "9-2": "Gandhi Jayanti", // Oct 2
+            "11-25": "Christmas"    // Dec 25
+        };
+
+        const key = `${month}-${day}`;
+        if (holidays[key]) {
+            holidayRow.style.display = 'flex';
+            holidayNameEl.textContent = holidays[key];
+        } else {
+            // Priority: Love/Hate text if no holiday
+            // We can add cheeky commentary about waiting
+        }
+
+        // 5. Handle "Enter" Click
+        enterBtn.addEventListener('click', () => {
+            // Fade out landing
+            landing.style.opacity = '0';
+            landing.style.transition = 'opacity 0.8s ease';
+
+            setTimeout(() => {
+                landing.style.display = 'none';
+                app.style.display = 'block';
+
+                // Initialize App with Preview Day
+                this.currentDay = previewDay;
+                this.loadDay(previewDay);
+                this.updateNavDate();
+            }, 800);
+        });
+
+        // 6. Update Nav Header to match Preview Context (Delayed to safe-guard against overwrites)
+        setTimeout(() => {
+            const navDay = document.getElementById('nav-day');
+            if (navDay && previewConfig) {
+                navDay.innerHTML = `<span style="opacity:0.8">Preview:</span> Feb ${previewDay} • ${previewConfig.name}`;
+            } else if (navDay) {
+                navDay.textContent = "Welcome • Select a Date";
+            }
+        }, 0);
     }
 
     // Old initScrollReveal removed in favor of initAutoReveal defined below
@@ -318,7 +402,16 @@ class FebruaryApp {
                 // 1. Close Menu Immediately
                 calendar.classList.remove('open');
 
-                // 2. Load Day IMMEDIATETLY (User wants nanosecond response)
+                // 2. Hide Landing Page if open
+                const landing = document.getElementById('landing-page');
+                const app = document.getElementById('app');
+                if (landing) {
+                    landing.style.display = 'none';
+                    landing.style.opacity = '0';
+                }
+                if (app) app.style.display = 'block';
+
+                // 3. Load Day IMMEDIATETLY (User wants nanosecond response)
                 this.loadDay(day);
             });
         });

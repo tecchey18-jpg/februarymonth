@@ -55,8 +55,42 @@
     <!-- Hero Spacer (For initial video view) -->
     <section id="hero"></section>
 
+    <!-- Landing Page (Intro) -->
+    <section class="landing-page" id="landing-page">
+        <div class="landing-content">
+            <div class="landing-header">
+                <span class="landing-emoji">✨</span>
+                <h1>The February Project</h1>
+                <p class="landing-subtitle">28 Days of Romance, Play, and Celebration</p>
+            </div>
+
+            <div class="landing-info-card">
+                <div class="landing-date-row">
+                    <span class="landing-label">Current Date:</span>
+                    <span class="landing-value" id="landing-date-real">January 24</span>
+                </div>
+                <div class="landing-context-row">
+                    <span class="landing-label">In The Month of Love:</span>
+                    <strong class="landing-value highlight" id="landing-feb-preview">Crush Day</strong>
+                </div>
+                <div class="landing-holiday-row" id="landing-holiday-row" style="display:none">
+                    <span class="landing-label">Today's Spirit:</span>
+                    <span class="landing-value" id="landing-holiday-name">Republic Day</span>
+                </div>
+                <p class="landing-message">
+                    "Since it's not February yet, take a peek at what this day <em>would</em> look like in our world."
+                </p>
+            </div>
+
+            <button class="landing-btn" id="landing-enter-btn">
+                Enter Simulation <span class="arrow">→</span>
+            </button>
+        </div>
+        <div class="landing-bg-gradient"></div>
+    </section>
+
     <!-- Main App -->
-    <main class="app">
+    <main class="app" id="app">
         <div class="game" id="game">
             <!-- Game content loaded by JavaScript -->
             <div class="game-emoji">🌹</div>

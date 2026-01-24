@@ -106,7 +106,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 100;
+    z-index: 1000;
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent);
     transition: all 0.3s ease;
 }
@@ -449,7 +449,7 @@ body {
     border-radius: 20px 20px 0 0;
     transform: translateY(100%);
     transition: transform 0.4s var(--ease-smooth);
-    z-index: 150;
+    z-index: 1100;
     padding: 2rem;
     overflow-y: auto;
 }
@@ -727,3 +727,174 @@ body {
         font-size: 1.8rem;
     }
 }
+
+/* Landing Page Styles */
+.landing-page {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    background: #000;
+}
+
+.landing-bg-gradient {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, #2a0a1a 0%, #000 100%);
+    opacity: 0.8;
+    z-index: -1;
+}
+
+.landing-content {
+    max-width: 600px;
+    width: 90%;
+    padding: 2rem;
+    animation: fadeIn 1s ease-out;
+}
+
+.landing-header {
+    margin-bottom: 3rem;
+}
+
+.landing-emoji {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+.landing-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(45deg, #fff, #ff6b9d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.landing-subtitle {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 1px;
+}
+
+.landing-info-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    margin-bottom: 2.5rem;
+    text-align: left;
+}
+
+.landing-date-row,
+.landing-context-row,
+.landing-holiday-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.landing-holiday-row {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.landing-label {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.landing-value {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.landing-value.highlight {
+    color: var(--accent);
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(230, 57, 70, 0.4);
+}
+
+.landing-message {
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.landing-btn {
+    background: white;
+    color: black;
+    border: none;
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.landing-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+}
+
+.landing-btn .arrow {
+    transition: transform 0.3s;
+}
+
+.landing-btn:hover .arrow {
+    transform: translateX(5px);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 480px) {
+    .landing-header h1 {
+        font-size: 2.5rem;
+    }
+
+    .landing-info-card {
+        padding: 1.5rem;
+    }
+
+    .landing-value {
+        font-size: 1rem;
+    }
+}
+
+
+/* Z-Index Adjustments for Calendar Access */
+.landing-page {
+    z-index: 900;
+}
+
+/* Below nav (1000) */
