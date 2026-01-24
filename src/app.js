@@ -42,6 +42,10 @@ class FebruaryApp {
         this.currentDialogueNode = 'start';
         this.dayConfig = this.config[dayNumber];
 
+        // Hide game immediately for fresh intro animation
+        const gameContainer = document.getElementById('game');
+        if (gameContainer) gameContainer.classList.remove('visible');
+
         if (!this.dayConfig) {
             console.error(`Day ${dayNumber} not found in config`);
             return;
@@ -234,14 +238,13 @@ class FebruaryApp {
 
         // Event Listeners
         document.getElementById('close-reward').addEventListener('click', () => {
-            // Go to next day or just close? 
-            // Logic: Just close for now, user can navigate manually or we could auto-advance
-            // Let's just create a nice closing effect or encourage next day
-            // For now: reload same day but reset
+            // Close the game experience and open calendar for next steps
             overlay.remove();
-            document.getElementById('game').style.display = 'block';
-            this.currentDialogueNode = 'start';
-            this.renderGame();
+            document.getElementById('game').style.display = 'none'; // Hide game
+
+            // Open calendar to encourage checking other days or coming back
+            const calendar = document.getElementById('calendar');
+            if (calendar) calendar.classList.add('open');
         });
 
         document.getElementById('replay-game').addEventListener('click', () => {
@@ -278,9 +281,8 @@ class FebruaryApp {
         gameContainer.style.display = 'block';
 
         // Reset Animation State:
-        // Remove .visible so it goes back to the "hidden/emerging" state
-        // The initAutoReveal timer will add it back after 2.8s
-        gameContainer.classList.remove('visible');
+        // We do NOT remove .visible here anymore because it breaks the loop.
+        // We only handle hiding in loadDay for the initial intro.
 
         // Clear inline styles that might interfere
         gameContainer.style.transition = '';
