@@ -390,9 +390,15 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', cacheSize: responseCache.size });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`🔥 February Celebration Server running on http://localhost:${PORT}`);
-    console.log(`💕 AI-powered dialogues ready with smart fallbacks!`);
-    console.log(`⚡ Rate limit protection: ${MIN_API_INTERVAL}ms between API calls`);
-});
+// For local development only - Vercel handles this differently
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`🔥 February Celebration Server running on http://localhost:${PORT}`);
+        console.log(`💕 AI-powered dialogues ready with smart fallbacks!`);
+        console.log(`⚡ Rate limit protection: ${MIN_API_INTERVAL}ms between API calls`);
+    });
+}
+
+// Export for Vercel serverless functions
+module.exports = app;
