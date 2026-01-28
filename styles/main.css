@@ -2,9 +2,7 @@
    FEBRUARY CELEBRATION - PREMIUM DESIGN
    ============================================ */
 
-/* ... (Keep existing basic resets or just overwrite with full new consistent file) ... */
-
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap');
+/* Fonts loaded in HTML with display=swap for performance */
 
 :root {
     --bg-dark: #0a0a0a;

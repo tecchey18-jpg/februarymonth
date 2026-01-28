@@ -6,13 +6,32 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const compression = require('compression');
 const OpenAI = require('openai');
 const path = require('path');
 
 const app = express();
+
+// Enable gzip compression for faster loading
+app.use(compression());
+
 app.use(cors());
 app.use(express.json());
-app.use(express.static('.'));
+
+// Serve static files with caching headers
+app.use(express.static('.', {
+    maxAge: '1h',
+    setHeaders: (res, path) => {
+        // Cache CSS and JS for longer
+        if (path.endsWith('.css') || path.endsWith('.js')) {
+            res.setHeader('Cache-Control', 'public, max-age=3600');
+        }
+        // Cache videos even longer
+        if (path.endsWith('.mp4')) {
+            res.setHeader('Cache-Control', 'public, max-age=86400');
+        }
+    }
+}));
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
