@@ -439,14 +439,29 @@ body {
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
+
+    0%,
+    100% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
 }
 
 @keyframes dots {
-    0% { content: '.'; }
-    33% { content: '..'; }
-    66% { content: '...'; }
+    0% {
+        content: '.';
+    }
+
+    33% {
+        content: '..';
+    }
+
+    66% {
+        content: '...';
+    }
 }
 
 /* Intensity Indicator */
@@ -459,8 +474,13 @@ body {
 }
 
 @keyframes glow {
-    from { text-shadow: 0 0 10px var(--gold); }
-    to { text-shadow: 0 0 20px var(--gold), 0 0 30px var(--accent); }
+    from {
+        text-shadow: 0 0 10px var(--gold);
+    }
+
+    to {
+        text-shadow: 0 0 20px var(--gold), 0 0 30px var(--accent);
+    }
 }
 
 /* Yes/No Button Styles */
@@ -475,7 +495,7 @@ body {
 
 .game-btn-no {
     background: transparent;
-    border: 1px solid rgba(255,255,255,0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .game-btn-no:hover {
@@ -552,6 +572,54 @@ body {
 
 .calendar-day .emoji {
     font-size: 1.5rem;
+}
+
+/* Calendar Header */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.calendar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.calendar-close {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calendar-close:hover {
+    background: var(--accent);
+    transform: scale(1.1);
+}
+
+/* Calendar Weekday Headers */
+.calendar-weekday {
+    text-align: center;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 0.5rem;
+    font-weight: 500;
 }
 
 /* Particles (Subtle background floating) */

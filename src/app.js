@@ -40,7 +40,6 @@ class FebruaryApp {
         this.config = typeof DAYS_CONFIG !== 'undefined' ? DAYS_CONFIG : {};
         this.denialPool = typeof DENIAL_POOL !== 'undefined' ? DENIAL_POOL : ["Please? 🥺"];
 
-<<<<<<< Updated upstream
         // Check if we need to show landing page (If not Feb, or forced for demo)
         const isFeb = this.isFebruary();
 
