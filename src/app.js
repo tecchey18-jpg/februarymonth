@@ -1,6 +1,6 @@
 // ============================================
 // FEBRUARY CELEBRATION - MAIN APP
-// Playful Persuasion Game Engine v2.0
+// AI-Powered Playful Persuasion Game Engine v3.0
 // ============================================
 
 class FebruaryApp {
@@ -10,7 +10,29 @@ class FebruaryApp {
         this.dayConfig = null;
         this.calendarOpen = false;
 
+        // AI Tracking
+        this.denialCount = 0;
+        this.sessionId = this.generateSessionId();
+        this.isLoadingAI = false;
+        this.apiBase = 'http://localhost:3000';
+
         this.init();
+    }
+
+    generateSessionId() {
+        return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    getCurrentDay() {
+        const now = new Date();
+        const month = now.getMonth() + 1; // 0-indexed
+        const day = now.getDate();
+
+        // If February, use actual day; otherwise default to day 1
+        if (month === 2 && day >= 1 && day <= 28) {
+            return day;
+        }
+        return 1;
     }
 
     init() {
@@ -18,6 +40,7 @@ class FebruaryApp {
         this.config = typeof DAYS_CONFIG !== 'undefined' ? DAYS_CONFIG : {};
         this.denialPool = typeof DENIAL_POOL !== 'undefined' ? DENIAL_POOL : ["Please? 🥺"];
 
+<<<<<<< Updated upstream
         // Check if we need to show landing page (If not Feb, or forced for demo)
         const isFeb = this.isFebruary();
 
@@ -117,14 +140,16 @@ class FebruaryApp {
                 navDay.textContent = "Welcome • Select a Date";
             }
         }, 0);
-    }
 
-    // Old initScrollReveal removed in favor of initAutoReveal defined below
+        // Build Calendar Grid
+        this.renderCalendarGrid();
+    }
 
     loadDay(dayNumber) {
         this.currentDay = dayNumber;
         this.currentDialogueNode = 'start';
         this.dayConfig = this.config[dayNumber];
+        this.denialCount = 0; // Reset denial count for new day
 
         // Hide game immediately for fresh intro animation
         const gameContainer = document.getElementById('game');
@@ -144,10 +169,10 @@ class FebruaryApp {
         // Update Particles
         this.updateParticles();
 
-        // Render the Game
-        this.renderGame();
+        // Render the Game (with AI initial dialogue)
+        this.renderGameWithAI();
 
-        // Update Calendar UI
+        // Update Calendar UI (Active State)
         this.updateCalendar();
 
         // Update URL Hash
@@ -176,11 +201,8 @@ class FebruaryApp {
         if (!videoContainer) return;
 
         const remoteUrl = this.dayConfig.videoUrl;
-        const localUrl = `assets/videos/day-${this.currentDay}.mp4`;
+        const localUrl = this.dayConfig.localVideo;
 
-        // EXTREME SIMPLIFICATION:
-        // No wrappers. No swapping. No transitions.
-        // Just put the video there.
         videoContainer.innerHTML = `
             <video autoplay muted loop playsinline id="bg-video">
                 <source src="${localUrl}" type="video/mp4">
@@ -213,25 +235,84 @@ class FebruaryApp {
         container.appendChild(particle);
     }
 
-    renderGame(customMessage = null) {
+    // Fetch AI-generated initial dialogue
+    async fetchInitialDialogue() {
+        try {
+            const response = await fetch(`${this.apiBase}/api/dialogue/initial`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ day: this.currentDay })
+            });
+
+            if (!response.ok) throw new Error('API Error');
+            return await response.json();
+        } catch (error) {
+            console.warn('AI unavailable, using fallback:', error);
+            // Fallback to config
+            const dialogue = this.dayConfig.dialogue.start;
+            return {
+                text: dialogue.text,
+                subtext: dialogue.subtext || '',
+                yesOption: dialogue.options[0].text,
+                noOption: dialogue.options[1].text
+            };
+        }
+    }
+
+    // Fetch AI-generated denial dialogue
+    async fetchDenialDialogue() {
+        try {
+            const response = await fetch(`${this.apiBase}/api/dialogue/denial`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    day: this.currentDay,
+                    denialCount: this.denialCount,
+                    sessionId: this.sessionId
+                })
+            });
+
+            if (!response.ok) throw new Error('API Error');
+            const data = await response.json();
+            return data.dialogue;
+        } catch (error) {
+            console.warn('AI unavailable, using fallback:', error);
+            // Fallback to denial pool
+            return this.denialPool[Math.floor(Math.random() * this.denialPool.length)];
+        }
+    }
+
+    // Fetch AI-generated reward message
+    async fetchRewardMessage() {
+        try {
+            const response = await fetch(`${this.apiBase}/api/dialogue/reward`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    day: this.currentDay,
+                    denialCount: this.denialCount
+                })
+            });
+
+            if (!response.ok) throw new Error('API Error');
+            const data = await response.json();
+            return data.message;
+        } catch (error) {
+            console.warn('AI unavailable, using fallback:', error);
+            return this.dayConfig.message || "You made my heart sing! 💕";
+        }
+    }
+
+    // Render game with AI-generated initial dialogue
+    async renderGameWithAI() {
         const gameContainer = document.getElementById('game');
         if (!gameContainer) return;
 
-        // Logic check: Are we in a loop or start?
-        let dialogueNode = this.dayConfig.dialogue[this.currentDialogueNode];
+        // Show loading state
+        this.showLoadingState(gameContainer);
 
-        // If we are in "denial_loop", generate a dynamic node
-        if (this.currentDialogueNode === 'denial_loop') {
-            const randomPlea = this.denialPool[Math.floor(Math.random() * this.denialPool.length)];
-            dialogueNode = {
-                text: customMessage || randomPlea,
-                subtext: "I can do this all day...",
-                options: [
-                    { text: "Okay, fine! Yes! 💕", next: "acceptance" },
-                    { text: "Still No", next: "denial_loop" } // Infinite loop
-                ]
-            };
-        }
+        // Fetch AI dialogue
+        const aiDialogue = await this.fetchInitialDialogue();
 
         const dateStr = `February ${this.currentDay}`;
 
@@ -244,48 +325,118 @@ class FebruaryApp {
             </div>
             
             <div class="game-dialogue">
-                <div class="game-text">"${dialogueNode.text}"</div>
-                ${dialogueNode.subtext ? `<div class="game-subtext">${dialogueNode.subtext}</div>` : ''}
+                <div class="game-text">"${aiDialogue.text}"</div>
+                ${aiDialogue.subtext ? `<div class="game-subtext">${aiDialogue.subtext}</div>` : ''}
             </div>
             
             <div class="game-buttons">
-                ${dialogueNode.options.map((opt, idx) => `
-                    <button class="game-btn" data-next="${opt.next}" data-index="${idx}">
-                        ${opt.text}
-                    </button>
-                `).join('')}
+                <button class="game-btn game-btn-yes" data-next="acceptance">
+                    ${aiDialogue.yesOption}
+                </button>
+                <button class="game-btn game-btn-no" data-next="denial_loop">
+                    ${aiDialogue.noOption}
+                </button>
             </div>
         `;
 
         // Add click handlers
-        gameContainer.querySelectorAll('.game-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const nextNode = e.currentTarget.dataset.next;
-                this.handleChoice(nextNode);
-            });
-        });
+        this.attachButtonHandlers(gameContainer);
 
         // Animate in
         this.animateGameIn();
     }
 
+    // Render denial dialogue with AI escalation
+    async renderDenialWithAI() {
+        const gameContainer = document.getElementById('game');
+        if (!gameContainer) return;
+
+        // Show loading state briefly
+        const textEl = gameContainer.querySelector('.game-text');
+        if (textEl) textEl.innerHTML = '<span class="loading-dots">Thinking</span>';
+
+        // Fetch AI denial dialogue
+        const denialText = await this.fetchDenialDialogue();
+
+        // Calculate intensity indicator
+        const intensity = Math.min(this.denialCount + 1, 5);
+        const intensityEmoji = '🔥'.repeat(intensity);
+
+        const dateStr = `February ${this.currentDay}`;
+
+        gameContainer.innerHTML = `
+            <div class="game-emoji">${this.dayConfig.emoji}</div>
+            
+            <div class="game-day-info">
+                <div class="game-date">${dateStr}</div>
+                <div class="game-title">${this.dayConfig.name}</div>
+                <div class="game-intensity">${intensityEmoji} Level ${intensity}</div>
+            </div>
+            
+            <div class="game-dialogue">
+                <div class="game-text">"${denialText}"</div>
+                <div class="game-subtext">I can do this all day... and it only gets spicier 🌶️</div>
+            </div>
+            
+            <div class="game-buttons">
+                <button class="game-btn game-btn-yes" data-next="acceptance">
+                    Okay, fine! Yes! 💕
+                </button>
+                <button class="game-btn game-btn-no" data-next="denial_loop">
+                    Still No 😏
+                </button>
+            </div>
+        `;
+
+        // Add click handlers
+        this.attachButtonHandlers(gameContainer);
+
+        // Animate in
+        this.animateGameIn();
+    }
+
+    showLoadingState(container) {
+        container.innerHTML = `
+            <div class="game-emoji">${this.dayConfig?.emoji || '💕'}</div>
+            <div class="game-dialogue">
+                <div class="game-text loading-pulse">✨ Crafting something special... ✨</div>
+            </div>
+        `;
+    }
+
+    attachButtonHandlers(container) {
+        container.querySelectorAll('.game-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const nextNode = e.currentTarget.dataset.next;
+                this.handleChoice(nextNode);
+            });
+        });
+    }
+
     handleChoice(nextNode) {
+        // Prevent spam clicking
+        if (this.isLoadingAI) return;
+        this.isLoadingAI = true;
+
         // Animation out
         const gameContainer = document.getElementById('game');
         gameContainer.style.opacity = '0';
         gameContainer.style.transform = 'translateY(-20px)';
 
-        setTimeout(() => {
+        setTimeout(async () => {
             if (nextNode === 'acceptance') {
-                this.renderReward();
+                await this.renderRewardWithAI();
             } else {
-                this.currentDialogueNode = nextNode;
-                this.renderGame();
+                // Increment denial count for escalation
+                this.denialCount++;
+                this.currentDialogueNode = 'denial_loop';
+                await this.renderDenialWithAI();
             }
+            this.isLoadingAI = false;
         }, 300);
     }
 
-    renderReward() {
+    async renderRewardWithAI() {
         // Create or get the reward overlay
         let overlay = document.getElementById('reward-overlay');
         if (!overlay) {
@@ -295,7 +446,30 @@ class FebruaryApp {
             document.body.appendChild(overlay);
         }
 
+        // Show loading
+        overlay.innerHTML = `
+            <div class="reward-card">
+                <div class="reward-content">
+                    <div class="reward-emoji">${this.dayConfig.emoji}</div>
+                    <h2 class="reward-title loading-pulse">Generating your reward... 🔥</h2>
+                </div>
+            </div>
+        `;
+        overlay.classList.add('active');
+
+        // Fetch AI reward message
+        const rewardMessage = await this.fetchRewardMessage();
         const rewardImg = this.dayConfig.rewardImage || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7';
+
+        // Determine title based on denial count
+        let titleText = "She Said Yes!";
+        if (this.denialCount > 5) {
+            titleText = "Finally Surrendered! 🔥";
+        } else if (this.denialCount > 3) {
+            titleText = "Couldn't Resist! 💋";
+        } else if (this.denialCount > 1) {
+            titleText = "You Gave In! 😏";
+        }
 
         overlay.innerHTML = `
             <div class="reward-card">
@@ -305,10 +479,11 @@ class FebruaryApp {
                 </div>
                 <div class="reward-content">
                     <div class="reward-emoji">${this.dayConfig.emoji}</div>
-                    <h2 class="reward-title">She Said Yes!</h2>
-                    <p class="reward-message">"${this.dayConfig.message || "You made my day special."}"</p>
+                    <h2 class="reward-title">${titleText}</h2>
+                    <p class="reward-message">"${rewardMessage}"</p>
+                    ${this.denialCount > 0 ? `<p class="reward-denial-count">You made me work for it: ${this.denialCount} denial${this.denialCount > 1 ? 's' : ''} 😈</p>` : ''}
                     <button class="reward-btn" id="close-reward">See You Tomorrow ✨</button>
-                    <button class="reward-replay-btn" id="replay-game">Replay</button>
+                    <button class="reward-replay-btn" id="replay-game">Replay 🔄</button>
                 </div>
                 <div class="confetti-container" id="reward-confetti"></div>
             </div>
@@ -322,11 +497,8 @@ class FebruaryApp {
 
         // Event Listeners
         document.getElementById('close-reward').addEventListener('click', () => {
-            // Close the game experience and open calendar for next steps
             overlay.remove();
-            document.getElementById('game').style.display = 'none'; // Hide game
-
-            // Open calendar to encourage checking other days or coming back
+            document.getElementById('game').style.display = 'none';
             const calendar = document.getElementById('calendar');
             if (calendar) calendar.classList.add('open');
         });
@@ -334,13 +506,9 @@ class FebruaryApp {
         document.getElementById('replay-game').addEventListener('click', () => {
             overlay.remove();
             document.getElementById('game').style.display = 'block';
+            this.denialCount = 0; // Reset for replay
             this.currentDialogueNode = 'start';
-            this.renderGame();
-        });
-
-        // Animate In
-        requestAnimationFrame(() => {
-            overlay.classList.add('active');
+            this.renderGameWithAI();
         });
     }
 
@@ -363,12 +531,6 @@ class FebruaryApp {
     animateGameIn() {
         const gameContainer = document.getElementById('game');
         gameContainer.style.display = 'block';
-
-        // Reset Animation State:
-        // We do NOT remove .visible here anymore because it breaks the loop.
-        // We only handle hiding in loadDay for the initial intro.
-
-        // Clear inline styles that might interfere
         gameContainer.style.transition = '';
         gameContainer.style.opacity = '';
         gameContainer.style.transform = '';
@@ -393,13 +555,33 @@ class FebruaryApp {
         if (calendarClose) {
             calendarClose.addEventListener('click', () => calendar.classList.remove('open'));
         }
+    }
 
-        // Calendar Day Clicking
-        document.querySelectorAll('.calendar-day[data-day]').forEach(dayEl => {
+    renderCalendarGrid() {
+        const grid = document.querySelector('.calendar-grid');
+        if (!grid) return;
+
+        // Keep headers, remove existing days
+        const headers = grid.querySelectorAll('.calendar-weekday');
+        grid.innerHTML = '';
+        headers.forEach(h => grid.appendChild(h));
+
+        // Generate days from 1 to 28
+        for (let i = 1; i <= 28; i++) {
+            const dayConfig = this.config[i];
+            const isActive = i === this.currentDay;
+
+            const dayEl = document.createElement('div');
+            dayEl.className = `calendar-day ${isActive ? 'active' : ''}`;
+            dayEl.dataset.day = i;
+
+            dayEl.innerHTML = `
+                <span class="num">${i}</span>
+                <span class="emoji">${dayConfig ? dayConfig.emoji : '❓'}</span>
+            `;
+
             dayEl.addEventListener('click', () => {
-                const day = parseInt(dayEl.dataset.day);
-
-                // 1. Close Menu Immediately
+                const calendar = document.getElementById('calendar');
                 calendar.classList.remove('open');
 
                 // 2. Hide Landing Page if open
@@ -411,10 +593,12 @@ class FebruaryApp {
                 }
                 if (app) app.style.display = 'block';
 
-                // 3. Load Day IMMEDIATETLY (User wants nanosecond response)
-                this.loadDay(day);
+                // 3. Load Day IMMEDIATELY (User wants nanosecond response)
+                this.loadDay(i);
             });
-        });
+
+            grid.appendChild(dayEl);
+        }
     }
 
     updateCalendar() {
@@ -425,12 +609,8 @@ class FebruaryApp {
     }
 
     initAutoReveal() {
-        // Simple Timer Logic: Reveal game after 2.8 seconds
-        // No scrolling, just appearing.
-
         const gameContainer = document.getElementById('game');
 
-        // Clear any existing timer if re-initializing
         if (this.revealTimer) clearTimeout(this.revealTimer);
 
         this.revealTimer = setTimeout(() => {

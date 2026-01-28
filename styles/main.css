@@ -421,6 +421,68 @@ body {
     transform: scale(1.05);
 }
 
+.reward-denial-count {
+    font-size: 0.9rem;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+/* Loading States */
+.loading-pulse {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.loading-dots::after {
+    content: '';
+    animation: dots 1.5s steps(3, end) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+@keyframes dots {
+    0% { content: '.'; }
+    33% { content: '..'; }
+    66% { content: '...'; }
+}
+
+/* Intensity Indicator */
+.game-intensity {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--gold);
+    text-shadow: 0 0 10px var(--gold);
+    animation: glow 1s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px var(--gold); }
+    to { text-shadow: 0 0 20px var(--gold), 0 0 30px var(--accent); }
+}
+
+/* Yes/No Button Styles */
+.game-btn-yes {
+    background: linear-gradient(135deg, var(--accent), var(--romantic-pink));
+    border: none;
+}
+
+.game-btn-yes:hover {
+    box-shadow: 0 0 30px var(--accent);
+}
+
+.game-btn-no {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.game-btn-no:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
 /* Confetti */
 .confetti-container {
     position: absolute;
