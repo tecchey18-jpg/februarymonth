@@ -145,6 +145,12 @@ class FebruaryApp {
     }
 
     loadDay(dayNumber) {
+        // FEBRUARY ONLY: Validate day is within February range (1-28)
+        if (dayNumber < 1 || dayNumber > 28) {
+            console.error(`Invalid day: ${dayNumber}. Only February dates (1-28) are allowed.`);
+            return;
+        }
+
         this.currentDay = dayNumber;
         this.currentDialogueNode = 'start';
         this.dayConfig = this.config[dayNumber];
@@ -565,14 +571,18 @@ class FebruaryApp {
         grid.innerHTML = '';
         headers.forEach(h => grid.appendChild(h));
 
-        // Generate days from 1 to 28
-        for (let i = 1; i <= 28; i++) {
+        // FEBRUARY ONLY: Generate days from 1 to 28 (February 2026)
+        const FEBRUARY_START = 1;
+        const FEBRUARY_END = 28;
+
+        for (let i = FEBRUARY_START; i <= FEBRUARY_END; i++) {
             const dayConfig = this.config[i];
             const isActive = i === this.currentDay;
 
             const dayEl = document.createElement('div');
             dayEl.className = `calendar-day ${isActive ? 'active' : ''}`;
             dayEl.dataset.day = i;
+            dayEl.dataset.month = 'february'; // Mark as February only
 
             dayEl.innerHTML = `
                 <span class="num">${i}</span>
@@ -580,10 +590,16 @@ class FebruaryApp {
             `;
 
             dayEl.addEventListener('click', () => {
+                // Validate: Only allow February dates (1-28)
+                if (i < FEBRUARY_START || i > FEBRUARY_END) {
+                    console.warn('Only February dates (1-28) are allowed');
+                    return;
+                }
+
                 const calendar = document.getElementById('calendar');
                 calendar.classList.remove('open');
 
-                // 2. Hide Landing Page if open
+                // Hide Landing Page if open
                 const landing = document.getElementById('landing-page');
                 const app = document.getElementById('app');
                 if (landing) {
@@ -592,7 +608,7 @@ class FebruaryApp {
                 }
                 if (app) app.style.display = 'block';
 
-                // 3. Load Day IMMEDIATELY (User wants nanosecond response)
+                // Load February day IMMEDIATELY
                 this.loadDay(i);
             });
 
