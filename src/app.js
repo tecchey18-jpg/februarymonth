@@ -566,12 +566,10 @@ class FebruaryApp {
         const grid = document.querySelector('.calendar-grid');
         if (!grid) return;
 
-        // Keep headers, remove existing days
-        const headers = grid.querySelectorAll('.calendar-weekday');
+        // Clear the grid completely (remove weekday headers for new design)
         grid.innerHTML = '';
-        headers.forEach(h => grid.appendChild(h));
 
-        // FEBRUARY ONLY: Generate days from 1 to 28 (February 2026)
+        // FEBRUARY ONLY: Generate fancy date cards from 1 to 28 (February 2026)
         const FEBRUARY_START = 1;
         const FEBRUARY_END = 28;
 
@@ -584,9 +582,11 @@ class FebruaryApp {
             dayEl.dataset.day = i;
             dayEl.dataset.month = 'february'; // Mark as February only
 
+            // Fancy UI: Show date, emoji, and celebration name
             dayEl.innerHTML = `
-                <span class="num">${i}</span>
-                <span class="emoji">${dayConfig ? dayConfig.emoji : '❓'}</span>
+                <div class="date-number">${i}</div>
+                <div class="date-emoji">${dayConfig ? dayConfig.emoji : '❓'}</div>
+                <div class="date-name">${dayConfig ? dayConfig.name : 'Unknown'}</div>
             `;
 
             dayEl.addEventListener('click', () => {
