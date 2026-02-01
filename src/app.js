@@ -45,6 +45,9 @@ class FebruaryApp {
 
         this.setupEventListeners(); // Always setup listeners so nav works
 
+        // IMPORTANT: Always build the calendar grid so date seeker works
+        this.renderCalendarGrid();
+
         if (!isFeb) {
             this.initLandingPage();
         } else {
@@ -139,9 +142,6 @@ class FebruaryApp {
                 navDay.textContent = "Welcome • Select a Date";
             }
         }, 0);
-
-        // Build Calendar Grid
-        this.renderCalendarGrid();
     }
 
     loadDay(dayNumber) {
