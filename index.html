@@ -3,141 +3,2337 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0a0a0a">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be Mine? 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <!-- SEO -->
-    <title>February Celebration | 28 Days of Love</title>
-    <meta name="description"
-        content="Celebrate every day of February with romantic games, flirty conversations, and unforgettable moments. From Rose Day to Valentine's and beyond.">
-    <meta name="keywords" content="february, valentine, rose day, love, romance, games, celebration">
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+        }
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="February Celebration | 28 Days of Love">
-    <meta property="og:description" content="Experience 28 days of romantic conversations and playful games.">
-    <meta property="og:type" content="website">
+        /* Animated gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            z-index: -1;
+        }
 
-    <!-- Favicon -->
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>">
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
 
-    <!-- Performance: Preconnect to external resources -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://videos.pexels.com">
-    <link rel="preconnect" href="https://images.pexels.com">
+            50% {
+                background-position: 100% 50%;
+            }
 
-    <!-- Fonts with display swap for faster rendering -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap">
+            100% {
+                background-position: 0% 50%;
+            }
+        }
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="styles/main.css">
+        /* VIDEO INTRO */
+        #video-intro {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease;
+        }
+
+        #video-intro.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #intro-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* INTRO TEXT OVERLAY */
+        #intro-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #intro-overlay.show {
+            opacity: 1;
+        }
+
+        .intro-text-container {
+            /* NO BACKGROUND - Just floating text on video */
+            text-align: center;
+            position: relative;
+        }
+
+        .intro-day-number {
+            font-size: 5rem;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 5px 30px rgba(0, 0, 0, 0.9), 0 0 60px rgba(255, 107, 157, 0.8);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .intro-day-name {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 3px 20px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 107, 157, 0.6);
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .intro-day-emoji {
+            font-size: 6rem;
+            margin-top: 1rem;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.7));
+        }
+
+        /* INTRO VIDEO CONTROLS */
+        .intro-controls {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1.5rem;
+            z-index: 10002;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .intro-controls.show {
+            opacity: 1;
+        }
+
+        .intro-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 30px;
+            padding: 1rem 2rem;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .intro-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        /* INTRO DAY HEADER */
+        #intro-day-header {
+            position: absolute;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 2rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            z-index: 10002;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            opacity: 0;
+            animation: fadeInDown 1s ease 0.5s forwards;
+        }
+
+        #intro-header-emoji {
+            font-size: 2rem;
+        }
+
+        #intro-header-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        /* FALLING STICKERS ANIMATION */
+        #intro-stickers {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 10001;
+        }
+
+        .falling-sticker {
+            position: absolute;
+            top: -50px;
+            font-size: 30px;
+            /* Smaller, "less pixel sticker" */
+            animation: fall linear forwards;
+            opacity: 0.8;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+
+        .intro-btn.skip {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: none;
+        }
+
+        .intro-btn.skip:hover {
+            box-shadow: 0 10px 40px rgba(255, 107, 157, 0.6);
+        }
+
+        /* REVERSE EXPLOSION ANIMATION */
+        .intro-day-number span,
+        .intro-day-name span,
+        .intro-day-emoji {
+            display: inline-block;
+            animation: reverseExplosion 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            opacity: 0;
+        }
+
+        @keyframes reverseExplosion {
+            0% {
+                transform: translate(var(--tx), var(--ty)) scale(0) rotate(var(--r));
+                opacity: 0;
+            }
+
+            100% {
+                transform: translate(0, 0) scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* Stagger animation for each character */
+        .intro-day-number span:nth-child(1) {
+            --tx: -200px;
+            --ty: -200px;
+            --r: -180deg;
+            animation-delay: 0.1s;
+        }
+
+        .intro-day-number span:nth-child(2) {
+            --tx: 200px;
+            --ty: -200px;
+            --r: 180deg;
+            animation-delay: 0.15s;
+        }
+
+        .intro-day-number span:nth-child(3) {
+            --tx: -200px;
+            --ty: 200px;
+            --r: 180deg;
+            animation-delay: 0.2s;
+        }
+
+        .intro-day-name span:nth-child(1) {
+            --tx: -150px;
+            --ty: -100px;
+            --r: -90deg;
+            animation-delay: 0.3s;
+        }
+
+        .intro-day-name span:nth-child(2) {
+            --tx: 150px;
+            --ty: -100px;
+            --r: 90deg;
+            animation-delay: 0.35s;
+        }
+
+        .intro-day-name span:nth-child(3) {
+            --tx: -150px;
+            --ty: 100px;
+            --r: 90deg;
+            animation-delay: 0.4s;
+        }
+
+        .intro-day-name span:nth-child(4) {
+            --tx: 150px;
+            --ty: 100px;
+            --r: -90deg;
+            animation-delay: 0.45s;
+        }
+
+        .intro-day-name span:nth-child(5) {
+            --tx: 0px;
+            --ty: -150px;
+            --r: 180deg;
+            animation-delay: 0.5s;
+        }
+
+        .intro-day-name span:nth-child(6) {
+            --tx: 0px;
+            --ty: 150px;
+            --r: -180deg;
+            animation-delay: 0.55s;
+        }
+
+        .intro-day-name span:nth-child(7) {
+            --tx: -100px;
+            --ty: 0px;
+            --r: -90deg;
+            animation-delay: 0.6s;
+        }
+
+        .intro-day-name span:nth-child(8) {
+            --tx: 100px;
+            --ty: 0px;
+            --r: 90deg;
+            animation-delay: 0.65s;
+        }
+
+        .intro-day-name span:nth-child(9) {
+            --tx: -100px;
+            --ty: -100px;
+            --r: 45deg;
+            animation-delay: 0.7s;
+        }
+
+        .intro-day-name span:nth-child(10) {
+            --tx: 100px;
+            --ty: 100px;
+            --r: -45deg;
+            animation-delay: 0.75s;
+        }
+
+        .intro-day-name span:nth-child(11),
+        .intro-day-name span:nth-child(12),
+        .intro-day-name span:nth-child(13),
+        .intro-day-name span:nth-child(14),
+        .intro-day-name span:nth-child(15) {
+            --tx: 50px;
+            --ty: -50px;
+            --r: 30deg;
+            animation-delay: calc(0.8s + var(--i) * 0.05s);
+        }
+
+        .intro-day-emoji {
+            --tx: 0px;
+            --ty: 300px;
+            --r: 720deg;
+            animation-delay: 1s;
+        }
+
+        /* TOP NAVIGATION BAR */
+        #top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 9000;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #top-nav.show {
+            opacity: 1;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .day-selector {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            padding: 0.6rem 1.5rem;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .day-selector:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            padding: 0.6rem 1.2rem;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.home {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .nav-btn.exit {
+            background: rgba(255, 0, 0, 0.3);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+        }
+
+        /* CALENDAR MODAL */
+        #calendar-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9500;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        #calendar-modal.show {
+            display: flex;
+        }
+
+        .calendar-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(30px);
+            border-radius: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .calendar-title {
+            font-size: 1.8rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .close-calendar {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-calendar:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+
+        .calendar-day {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-day:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-5px);
+        }
+
+        .calendar-day.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-color: transparent;
+        }
+
+        .day-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.3rem;
+        }
+
+        .day-emoji {
+            font-size: 2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .day-name {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* CONTINUOUS FALLING EMOJIS */
+        #default-particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .default-particle {
+            position: absolute;
+            font-size: 2.5rem;
+            animation: continuousFall linear infinite;
+            opacity: 0.4;
+        }
+
+        @keyframes continuousFall {
+            0% {
+                transform: translateY(-50px) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.6;
+            }
+
+            90% {
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* RESPONSIVE PARTICLES */
+        #responsive-particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .responsive-particle {
+            position: absolute;
+            font-size: 3rem;
+            animation: responsiveFall 0.5s ease-out forwards;
+        }
+
+        @keyframes responsiveFall {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(60vh) rotate(180deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* GAME CONTAINER */
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 1s ease;
+            z-index: 10;
+        }
+
+        #game-container.show {
+            opacity: 1;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            padding: 3rem;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            overflow: visible;
+            /* Ensuring No button can escape */
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shine 4s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* REALISTIC VIDEO AVATAR */
+        #avatar-container {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin: 0 auto 2rem;
+        }
+
+        .avatar-video-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            animation: breatheAvatar 4s ease-in-out infinite;
+        }
+
+        @keyframes breatheAvatar {
+
+            0%,
+            100% {
+                transform: scale(1) translateY(0);
+                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            }
+
+            50% {
+                transform: scale(1.03) translateY(-8px);
+                box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+            }
+        }
+
+        #avatar-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.2);
+            /* Zoom in for face close-up */
+        }
+
+        /* Glow effect when talking */
+        .avatar-video-container.talking {
+            animation: breatheAvatar 4s ease-in-out infinite, glowPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 20px 50px rgba(255, 107, 157, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 25px 60px rgba(255, 107, 157, 0.6);
+            }
+        }
+
+        /* Speech bubble - No background, just text */
+        .speech-bubble {
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: transparent;
+            color: #fff;
+            padding: 1.2rem 1.8rem;
+            min-width: 240px;
+            max-width: 400px;
+            animation: bubblePop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 10005;
+            text-shadow:
+                0 2px 4px rgba(0, 0, 0, 0.9),
+                0 4px 15px rgba(0, 0, 0, 0.6),
+                0 0 25px rgba(255, 105, 180, 0.5);
+            font-weight: 600;
+            font-size: 1.25rem;
+            letter-spacing: 0.5px;
+        }
+
+        .speech-bubble::after {
+            display: none;
+        }
+
+        @keyframes bubblePop {
+            0% {
+                transform: translateX(-50%) scale(0);
+                opacity: 0;
+            }
+
+            70% {
+                transform: translateX(-50%) scale(1.1);
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .speech-text {
+            font-size: 1.05rem;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        /* Expression emojis */
+        .expression-emoji {
+            position: absolute;
+            font-size: 4.5rem;
+            pointer-events: none;
+            animation: emojiFloat 1s ease-out;
+            z-index: 20005;
+            /* Higher than button and speech bubble */
+        }
+
+        .expr-happy {
+            top: -50px;
+            right: -50px;
+        }
+
+        .expr-sad {
+            top: 20px;
+            left: 20px;
+            /* Moved inside to avoid clipping off-screen */
+        }
+
+        @keyframes emojiFloat {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.5) rotate(25deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* QUESTION */
+        .question {
+            font-size: 2.3rem;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
+            min-height: 70px;
+            font-weight: 700;
+        }
+
+        .subtext {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        /* BUTTONS */
+        .buttons-container {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+            min-height: 90px;
+        }
+
+        button {
+            padding: 1.3rem 3.5rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+            z-index: 100;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:hover::before {
+            width: 350px;
+            height: 350px;
+        }
+
+        #yes-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            box-shadow: 0 12px 35px rgba(245, 87, 108, 0.5);
+        }
+
+        #yes-btn:hover {
+            transform: scale(1.12);
+            box-shadow: 0 18px 45px rgba(245, 87, 108, 0.7);
+        }
+
+        #no-btn {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+            position: relative;
+            animation: hoverFloat 2s ease-in-out infinite;
+        }
+
+        @keyframes hoverFloat {
+            0% {
+                transform: translate(0px, 0px);
+            }
+
+            10% {
+                transform: translate(-15px, -10px);
+            }
+
+            20% {
+                transform: translate(20px, 5px);
+            }
+
+            30% {
+                transform: translate(-10px, 15px);
+            }
+
+            40% {
+                transform: translate(15px, -15px);
+            }
+
+            50% {
+                transform: translate(-20px, 0px);
+            }
+
+            60% {
+                transform: translate(10px, 10px);
+            }
+
+            70% {
+                transform: translate(-5px, -20px);
+            }
+
+            80% {
+                transform: translate(18px, -5px);
+            }
+
+            90% {
+                transform: translate(-12px, 12px);
+            }
+
+            100% {
+                transform: translate(0px, 0px);
+            }
+        }
+
+        #no-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+            animation: hoverFloat 1s ease-in-out infinite;
+        }
+
+        /* SUCCESS SCREEN */
+        #success-screen {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.8s ease;
+        }
+
+        #success-screen.show {
+            display: flex;
+        }
+
+        .success-content {
+            text-align: center;
+            color: white;
+        }
+
+        .success-animation {
+            width: 500px;
+            height: 500px;
+            margin: 0 auto 2rem;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.6);
+        }
+
+        #success-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .success-content h1 {
+            font-size: 4.5rem;
+            margin-bottom: 1rem;
+            animation: heartbeat 1.2s infinite;
+            text-shadow: 0 5px 20px rgba(255, 107, 157, 0.8);
+        }
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            30% {
+                transform: scale(1.15);
+            }
+        }
+
+        .success-content p {
+            font-size: 1.8rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .glass-card {
+                padding: 2rem;
+            }
+
+            .question {
+                font-size: 1.8rem;
+            }
+
+            .avatar-video-container {
+                width: 260px;
+                height: 260px;
+            }
+
+            button {
+                padding: 1.1rem 2.5rem;
+                font-size: 1.2rem;
+            }
+
+            .speech-bubble {
+                top: -85px;
+                max-width: 280px;
+            }
+
+            .success-animation {
+                width: 90%;
+                height: auto;
+                aspect-ratio: 1;
+            }
+
+            .success-content h1 {
+                font-size: 3rem;
+            }
+        }
+
+        /* Loading placeholder */
+        .loading-placeholder {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(145deg, #ffd7ba 0%, #ffb38a 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4rem;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 
-<body class="theme-romantic">
+<body>
+    <!-- TOP NAVIGATION BAR -->
+    <div id="top-nav">
+        <div class="nav-left">
+            <div class="nav-logo">💕 February Love</div>
+            <button class="day-selector" id="day-selector">📅 Day 14 - Valentine's Day</button>
+        </div>
+        <div class="nav-right">
+            <button class="nav-btn home" id="btn-home">🏠 Home</button>
+            <button class="nav-btn" id="btn-restart">🔄 Restart</button>
+            <button class="nav-btn exit" id="btn-exit">❌ Exit</button>
+        </div>
+    </div>
 
-    <!-- Video Background -->
-    <div class="video-bg" id="video-bg">
-        <video autoplay muted loop playsinline>
-            <source
-                src="https://assets.mixkit.co/videos/preview/mixkit-red-rose-petals-falling-on-black-background-4027.mp4"
-                type="video/mp4">
+    <!-- CALENDAR MODAL - Pre-populated for instant loading -->
+    <div id="calendar-modal">
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <h2 class="calendar-title">Choose a Day 💕</h2>
+                <button class="close-calendar" id="close-calendar"
+                    onclick="document.getElementById('calendar-modal').classList.remove('show');">×</button>
+            </div>
+            <div class="calendar-grid" id="calendar-grid">
+                <div class="calendar-day"
+                    onclick="localStorage.setItem('selectedDay','1');localStorage.setItem('selectedDayTimestamp',Date.now());location.reload();">
+                    <div class="day-number">1</div>
+                    <div class="day-emoji">💝</div>
+                    <div class="day-name">Self Love</div>
+                </div>
+                <div class="calendar-day"
+                    onclick="localStorage.setItem('selectedDay','2');localStorage.setItem('selectedDayTimestamp',Date.now());location.reload();">
+                    <div class="day-number">2</div>
+                    <div class="day-emoji">👥</div>
+                    <div class="day-name">Friendship</div>
+                </div>
+                <div class="calendar-day"
+                    onclick="localStorage.setItem('selectedDay','3');localStorage.setItem('selectedDayTimestamp',Date.now());location.reload();">
+                    <div class="day-number">3</div>
+                    <div class="day-emoji">😍</div>
+                    <div class="day-name">Crush Day</div>
+                </div>
+                <div class="calendar-day"
+                    onclick="localStorage.setItem('selectedDay','4');localStorage.setItem('selectedDayTimestamp',Date.now());location.reload();">
+                    <div class="day-number">4</div>
+                    <div class="day-emoji">✨</div>
+                    <div class="day-name">Charm Day</div>
+                </div>
+                <div class="calendar-day"
+                    onclick="localStorage.setItem('selectedDay','5');localStorage.setItem('selectedDayTimestamp',Date.now());location.reload();">
+                    <div class="day-number">5</div>
+                    <div class="day-emoji">🌟</div>
+                    <div class="day-name">Destiny</div>
+                </div>
+                <div class="calendar-day"
+                    onclick="localStorage.setItem('selectedDay','6');localStorage.setItem('selectedDayTimestamp',Date.now());location.reload();">
+                    <div class="day-number">6</div>
+                    <div class="day-emoji">⏳</div>
+                    <div class="day-name">Anticipation</div>
+                </div>
+                <div class="calendar-day"
+                    onclick="localStorage.setItem('selectedDay','7');localStorage.setItem('selectedDayTimestamp',Date.now());location.reload();">
+                    <div class="day-number">7</div>
+                    <div class="day-emoji">🌹</div>
+                    <div class="day-name">Rose Day</div>
+                </div>
+                <div class="calendar-day"
+                    onclick="localStorage.setItem('selectedDay','8');localStorage.setItem('selectedDayTimestamp',Date.now());location.reload();">
+                    <div class="day-number">8</div>
+                    <div class="day-emoji">💍</div>
+                    <div class="day-name">Propose Day</div>
+                </div>
+                <div class="calendar-day"
+                    onclick="localStorage.setItem('selectedDay','9');localStorage.setItem('selectedDayTimestamp',Date.now());location.reload();">
+                    <div class="day-number">9</div>
+                    <div class="day-emoji">🍫</div>
+                    <div class="day-name">Chocolate</div>
+                </div>
+                <div class="calendar-day"
+                    onclick="localStorage.setItem('selectedDay','10');localStorage.setItem('selectedDayTimestamp',Date.now());location.reload();">
+                    <div class="day-number">10</div>
+                    <div class="day-emoji">🧸</div>
+                    <div class="day-name">Teddy Day</div>
+                </div>
+                <div class="calendar-day"
+                    onclick="localStorage.setItem('selectedDay','11');localStorage.setItem('selectedDayTimestamp',Date.now());location.reload();">
+                    <div class="day-number">11</div>
+                    <div class="day-emoji">💌</div>
+                    <div class="day-name">Promise</div>
+                </div>
+                <div class="calendar-day"
+                    onclick="localStorage.setItem('selectedDay','12');localStorage.setItem('selectedDayTimestamp',Date.now());location.reload();">
+                    <div class="day-number">12</div>
+                    <div class="day-emoji">🤗</div>
+                    <div class="day-name">Hug Day</div>
+                </div>
+                <div class="calendar-day"
+                    onclick="localStorage.setItem('selectedDay','13');localStorage.setItem('selectedDayTimestamp',Date.now());location.reload();">
+                    <div class="day-number">13</div>
+                    <div class="day-emoji">💋</div>
+                    <div class="day-name">Kiss Day</div>
+                </div>
+                <div class="calendar-day"
+                    onclick="localStorage.setItem('selectedDay','14');localStorage.setItem('selectedDayTimestamp',Date.now());location.reload();">
+                    <div class="day-number">14</div>
+                    <div class="day-emoji">❤️</div>
+                    <div class="day-name">Valentine's</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DEFAULT CONTINUOUS FALLING PARTICLES -->
+    <div id="default-particles"></div>
+
+    <!-- RESPONSIVE TEMPORARY PARTICLES -->
+    <div id="responsive-particles"></div>
+
+    <!-- VIDEO INTRO SPLASH -->
+    <div id="video-intro">
+        <video id="intro-video" autoplay muted playsinline>
+            <source id="intro-video-source" src="assets/videos/feb-08-propose-day.mp4" type="video/mp4">
+            Your browser doesn't support video.
         </video>
-    </div>
-    <div class="video-overlay"></div>
 
-    <!-- Particles -->
-    <div class="particles" id="particles"></div>
-
-    <!-- Navigation -->
-    <nav class="nav">
-        <a href="#" class="nav-logo">
-            <span>💕</span>
-            February
-        </a>
-        <div class="nav-day" id="nav-day">Feb 1 • Rose Day</div>
-        <button class="nav-calendar-btn" id="calendar-btn" aria-label="Open Calendar">
-            📅
-        </button>
-    </nav>
-
-    <!-- Hero Spacer (For initial video view) -->
-    <section id="hero"></section>
-
-    <!-- Landing Page (Intro) -->
-    <section class="landing-page" id="landing-page">
-        <div class="landing-content">
-            <div class="landing-header">
-                <span class="landing-emoji">✨</span>
-                <h1>The February Project</h1>
-                <p class="landing-subtitle">28 Days of Romance, Play, and Celebration</p>
-            </div>
-
-            <div class="landing-info-card">
-                <div class="landing-date-row">
-                    <span class="landing-label">Current Date:</span>
-                    <span class="landing-value" id="landing-date-real">January 24</span>
-                </div>
-                <div class="landing-context-row">
-                    <span class="landing-label">In The Month of Love:</span>
-                    <strong class="landing-value highlight" id="landing-feb-preview">Crush Day</strong>
-                </div>
-                <div class="landing-holiday-row" id="landing-holiday-row" style="display:none">
-                    <span class="landing-label">Today's Spirit:</span>
-                    <span class="landing-value" id="landing-holiday-name">Republic Day</span>
-                </div>
-                <p class="landing-message">
-                    "Since it's not February yet, take a peek at what this day <em>would</em> look like in our world."
-                </p>
-            </div>
-
-            <button class="landing-btn" id="landing-enter-btn">
-                Enter Simulation <span class="arrow">→</span>
-            </button>
-        </div>
-        <div class="landing-bg-gradient"></div>
-    </section>
-
-    <!-- Main App -->
-    <main class="app" id="app">
-        <div class="game" id="game">
-            <!-- Game content loaded by JavaScript -->
-            <div class="game-emoji">🌹</div>
-
-            <div class="game-day-info">
-                <div class="game-date">February 1</div>
-                <div class="game-title">Rose Day</div>
-            </div>
-
-            <div class="game-dialogue">
-                <div class="game-text">"I brought you a rose. Will you accept it?"</div>
-                <div class="game-subtext">Be honest with me...</div>
-            </div>
-
-            <div class="game-buttons">
-                <button class="game-btn">Yes, I'd love to 💕</button>
-                <button class="game-btn">No thanks</button>
-                <button class="game-btn">Maybe...</button>
-            </div>
-        </div>
-    </main>
-
-    <!-- Calendar Panel -->
-    <div class="calendar" id="calendar">
-        <div class="calendar-header">
-            <h2 class="calendar-title">💕 February 2026 Celebration</h2>
-            <button class="calendar-close" id="calendar-close" aria-label="Close Calendar">✕</button>
+        <!-- DAY HEADER - Shows current day name -->
+        <div id="intro-day-header">
+            <span id="intro-header-emoji">💍</span>
+            <span id="intro-header-text">Propose Day</span>
         </div>
 
-        <div class="calendar-grid">
-            <!-- Fancy date cards will be generated by JavaScript -->
+        <!-- FALLING STICKERS -->
+        <div id="intro-stickers"></div>
+
+        <!-- ANIMATED TEXT OVERLAY -->
+        <div id="intro-overlay">
+            <div class="intro-text-container">
+                <div class="intro-day-number" id="intro-day-number"></div>
+                <div class="intro-day-name" id="intro-day-name"></div>
+                <div class="intro-day-emoji" id="intro-day-emoji"></div>
+            </div>
+        </div>
+
+        <!-- INTRO CONTROLS - Only Skip button now -->
+        <div class="intro-controls" id="intro-controls">
+            <button class="intro-btn skip" id="skip-btn">⏭️ Skip to Game</button>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="src/days-config.js"></script>
-    <script src="src/app.js"></script>
+    <!-- MAIN GAME -->
+    <div id="game-container">
+        <!-- Speech bubble - Moved outside glass card to avoid clipping -->
+        <div class="speech-bubble" id="speech-bubble">
+            <div class="speech-text" id="speech-text"></div>
+        </div>
+
+        <div class="glass-card">
+            <!-- REALISTIC VIDEO AVATAR -->
+            <div id="avatar-container">
+                <!-- Realistic talking person video -->
+                <div class="avatar-video-container" id="avatar-video-container">
+                    <!-- Loading placeholder -->
+                    <div class="loading-placeholder">👤</div>
+
+                    <!-- REPLACE THIS VIDEO WITH REALISTIC TALKING PERSON -->
+                    <video id="avatar-video" autoplay loop muted playsinline>
+                        <!-- Option 1: Use Pexels free realistic talking person -->
+                        <source src="https://videos.pexels.com/video-files/5273800/5273800-uhd_1440_2732_25fps.mp4"
+                            type="video/mp4">
+
+                        <!-- Option 2: Your own video -->
+                        <!-- <source src="assets/videos/talking-person.mp4" type="video/mp4"> -->
+                    </video>
+                </div>
+
+                <!-- Expression overlay -->
+                <div id="expression-container"></div>
+            </div>
+
+            <!-- Question -->
+            <h1 class="question" id="question-text">Will you be mine? 💕</h1>
+            <p class="subtext" id="subtext">I've been waiting to ask you this... 🥺</p>
+
+            <!-- Buttons -->
+            <div class="buttons-container" id="buttons-container">
+                <button id="yes-btn">Yes! 💖</button>
+                <button id="no-btn">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUCCESS SCREEN -->
+    <div id="success-screen">
+        <div class="success-content">
+            <div class="success-animation">
+                <!-- SUCCESS VIDEO: Couple celebrating, kissing, etc. -->
+                <video id="success-video" autoplay loop muted playsinline style="display: block;">
+                    <!-- REPLACE WITH COUPLE VIDEO -->
+                    <source src="https://videos.pexels.com/video-files/5368831/5368831-uhd_1440_2732_25fps.mp4"
+                        type="video/mp4">
+                </video>
+            </div>
+            <h1>💕 You Said Yes! 💕</h1>
+            <p>You just made me the happiest person alive! ✨</p>
+            <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;">
+                <button class="nav-btn" onclick="location.reload()"
+                    style="background: rgba(255, 255, 255, 0.3); border: 1px solid rgba(255, 255, 255, 0.4); padding: 1rem 2rem; border-radius: 30px; color: white; font-size: 1.1rem; cursor: pointer;">🔄
+                    Play Again</button>
+                <button class="nav-btn home" onclick="location.href='./';"
+                    style="padding: 1rem 2rem; border-radius: 30px; font-size: 1.1rem; cursor: pointer;">🏠
+                    Home</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DAY CONFIGURATIONS - All February days
+        const DAY_CONFIG = {
+            1: { name: 'Self Love Day', emoji: '💝', aesthetic: 'Love Yourself', subtitle: 'The Journey Starts Within', video: 'assets/videos/feb-01-self-love-day.mp4' },
+            2: { name: 'Friendship Day', emoji: '👥', aesthetic: 'Friends Forever', subtitle: 'Bonds That Last', video: 'assets/videos/feb-02-friendship-day.mp4' },
+            3: { name: 'Crush Day', emoji: '😍', aesthetic: 'Secret Admirer', subtitle: 'The Flutter Begins', video: 'assets/videos/feb-03-crush-day.mp4' },
+            4: { name: 'Charm Day', emoji: '✨', aesthetic: 'Irresistible Charm', subtitle: 'Cast Your Spell', video: 'assets/videos/feb-04-charm-day.mp4' },
+            5: { name: 'Destiny Day', emoji: '🌟', aesthetic: 'Written in Stars', subtitle: 'Fate Unfolds', video: 'assets/videos/feb-05-destiny-day.mp4' },
+            6: { name: 'Anticipation Day', emoji: '⏳', aesthetic: 'Sweet Anticipation', subtitle: 'The Wait is Almost Over', video: 'assets/videos/feb-06-anticipation-day.mp4' },
+            7: { name: 'Rose Day', emoji: '🌹', aesthetic: 'A Day of Roses', subtitle: 'Where Love Blooms', video: 'assets/videos/feb-07-rose-day.mp4' },
+            8: { name: 'Propose Day', emoji: '💍', aesthetic: 'The Proposal', subtitle: 'A Question of Forever', video: 'assets/videos/feb-08-propose-day.mp4' },
+            9: { name: 'Chocolate Day', emoji: '🍫', aesthetic: 'Sweet Temptation', subtitle: 'Indulge in Love', video: 'assets/videos/feb-09-chocolate-day.mp4' },
+            10: { name: 'Teddy Day', emoji: '🧸', aesthetic: 'Cuddles & Warmth', subtitle: 'Embrace the Moment', video: 'assets/videos/feb-10-teddy-day.mp4' },
+            11: { name: 'Promise Day', emoji: '💌', aesthetic: 'The Promise', subtitle: 'A Vow of Hearts', video: 'assets/videos/feb-11-promise-day.mp4' },
+            12: { name: 'Hug Day', emoji: '🤗', aesthetic: 'In Your Arms', subtitle: 'Feel the Connection', video: 'assets/videos/feb-12-hug-day.mp4' },
+            13: { name: 'Kiss Day', emoji: '💋', aesthetic: 'The Kiss Awaits', subtitle: 'Sealed with Love', video: 'assets/videos/feb-13-kiss-day.mp4' },
+            14: { name: "Valentine's Day", emoji: '❤️', aesthetic: "Valentine's Love", subtitle: 'The Day of Hearts', video: 'assets/videos/feb-14-valentines-day.mp4' },
+            15: { name: 'Slap Day', emoji: '👋', aesthetic: 'Reality Check', subtitle: 'Time to Move On', video: 'assets/videos/feb-15-slap-day.mp4' },
+            16: { name: 'Kick Day', emoji: '🦵', aesthetic: 'Fresh Start', subtitle: 'Kicking Out the Past', video: 'assets/videos/feb-16-kick-day.mp4' },
+            17: { name: 'Perfume Day', emoji: '🌸', aesthetic: 'Sweet Fragrance', subtitle: 'Memory in a Scent', video: 'assets/videos/feb-17-perfume-day.mp4' },
+            18: { name: 'Flirting Day', emoji: '😉', aesthetic: 'Playful Vibes', subtitle: 'A Little Flirt', video: 'assets/videos/feb-18-flirting-day.mp4' },
+            19: { name: 'Confession Day', emoji: '💭', aesthetic: 'Speak Your Heart', subtitle: 'Truth Be Told', video: 'assets/videos/feb-19-confession-day.mp4' },
+            20: { name: 'Missing Day', emoji: '💔', aesthetic: 'Missing You', subtitle: 'Memories Linger', video: 'assets/videos/feb-20-missing-day.mp4' },
+            21: { name: 'Breakup Day', emoji: '💔', aesthetic: 'Time to Let Go', subtitle: 'New Beginnings', video: 'assets/videos/feb-21-breakup-day.mp4' },
+            22: { name: 'Singles Day', emoji: '🎉', aesthetic: 'Single & Happy', subtitle: 'Celebrating You', video: 'assets/videos/feb-22-singles-day.mp4' },
+            23: { name: 'Healing Day', emoji: '💚', aesthetic: 'Time to Heal', subtitle: 'Peace Within', video: 'assets/videos/feb-23-healing-day.mp4' },
+            24: { name: 'Chaos Love Day', emoji: '🌪️', aesthetic: 'Beautiful Chaos', subtitle: 'Love is Wild', video: 'assets/videos/feb-24-chaos-love-day.mp4' },
+            25: { name: 'Eternal Love Day', emoji: '💞', aesthetic: 'Forever & Always', subtitle: 'Love That Lasts', video: 'assets/videos/feb-25-eternal-love-day.mp4' },
+            26: { name: 'Self Date Day', emoji: '🌷', aesthetic: 'Date Yourself', subtitle: 'You Deserve It', video: 'assets/videos/feb-26-self-date-day.mp4' },
+            27: { name: 'New Beginnings', emoji: '🌅', aesthetic: 'Fresh Start', subtitle: 'A New Chapter', video: 'assets/videos/feb-27-new-beginnings.mp4' },
+            28: { name: 'Season Finale', emoji: '🎬', aesthetic: 'The Finale', subtitle: 'Until Next Time', video: 'assets/videos/feb-28-season-finale.mp4' }
+        };
+
+        // DAY-SPECIFIC EMOJI CONFIGURATIONS
+        const DAY_EMOJIS = {
+            1: ['🌹', '💐', '🌺', '🌸'],
+            7: ['🌹', '💐', '🌺', '🌸'],
+            8: ['💍', '💎', '✨', '💫'],
+            9: ['🍫', '🍬', '🍭', '🧁'],
+            10: ['🧸', '🎁', '🎀', '💝'],
+            11: ['💌', '💕', '💖', '💗'],
+            12: ['🤗', '💏', '❤️', '💓'],
+            13: ['💋', '💄', '😘', '😍'],
+            14: ['❤️', '💕', '💖', '💗', '💝', '💞']
+        };
+
+        const SAD_EMOJIS = ['💔', '😢', '😭', '💧', '😔', '😞', '💨', '🌧️'];
+
+        // AUTO-DETECT CURRENT DAY from actual date
+        const today = new Date();
+        const currentMonth = today.getMonth() + 1; // 0-indexed, so +1
+        const currentDate = today.getDate();
+        const isFebruary = currentMonth === 2 && currentDate >= 1 && currentDate <= 28;
+
+        // Check if user manually selected a day in this browser session
+        const savedDay = localStorage.getItem('selectedDay');
+        const savedTimestamp = localStorage.getItem('selectedDayTimestamp');
+        const now = Date.now();
+        const ONE_HOUR = 60 * 60 * 1000;
+
+        let currentDay;
+
+        if (isFebruary) {
+            // In February: always auto-detect today's date UNLESS user just selected a different day
+            if (savedDay && savedTimestamp && (now - parseInt(savedTimestamp)) < ONE_HOUR) {
+                // User manually selected within the last hour - respect their choice
+                currentDay = parseInt(savedDay);
+                console.log(`Using user's recent selection: Day ${currentDay}`);
+            } else {
+                // Auto-detect: use today's date
+                currentDay = currentDate;
+                // Clear any stale localStorage
+                localStorage.removeItem('selectedDay');
+                localStorage.removeItem('selectedDayTimestamp');
+                console.log(`Auto-detected: February ${currentDay} - ${DAY_CONFIG[currentDay]?.name || 'Unknown'}`);
+            }
+        } else {
+            // Not February: use saved day or default to 14 (Valentine's Day)
+            currentDay = (savedDay && DAY_CONFIG[parseInt(savedDay)]) ? parseInt(savedDay) : 14;
+            console.log(`Outside February: Using Day ${currentDay}`);
+        }
+
+        const DEFAULT_EMOJIS = DAY_EMOJIS[currentDay] || DAY_EMOJIS[14];
+
+        // NAVIGATION & CALENDAR
+        const topNav = document.getElementById('top-nav');
+        const daySelector = document.getElementById('day-selector');
+        const calendarModal = document.getElementById('calendar-modal');
+        const calendarGrid = document.getElementById('calendar-grid');
+        const closeCalendar = document.getElementById('close-calendar');
+        const btnHome = document.getElementById('btn-home');
+        const btnRestart = document.getElementById('btn-restart');
+        const btnExit = document.getElementById('btn-exit');
+
+        // Calendar is pre-populated in HTML for instant loading
+        // No need to generate - just update day selector display
+        function updateDayDisplay() {
+            const config = DAY_CONFIG[currentDay];
+            daySelector.textContent = `📅 Day ${currentDay} - ${config.name}`;
+        }
+
+        updateDayDisplay();
+
+        // Show calendar instantly on click (already in HTML)
+        daySelector.addEventListener('click', () => {
+            calendarModal.classList.add('show');
+        });
+
+        closeCalendar.addEventListener('click', () => {
+            calendarModal.classList.remove('show');
+        });
+
+        calendarModal.addEventListener('click', (e) => {
+            if (e.target === calendarModal) {
+                calendarModal.classList.remove('show');
+            }
+        });
+
+        btnHome.addEventListener('click', () => {
+            window.location.href = './';
+        });
+
+        btnRestart.addEventListener('click', () => {
+            location.reload();
+        });
+
+        btnExit.addEventListener('click', () => {
+            if (confirm('Are you sure you want to exit?')) {
+                window.close();
+                // If window.close() doesn't work (modern browsers), redirect
+                setTimeout(() => {
+                    window.location.href = 'about:blank';
+                }, 100);
+            }
+        });
+
+        // VIDEO INTRO
+        const videoIntro = document.getElementById('video-intro');
+        const introVideo = document.getElementById('intro-video');
+        const gameContainer = document.getElementById('game-container');
+        const introOverlay = document.getElementById('intro-overlay');
+        const introDayNumber = document.getElementById('intro-day-number');
+        const introDayName = document.getElementById('intro-day-name');
+        const introDayEmoji = document.getElementById('intro-day-emoji');
+        const introControls = document.getElementById('intro-controls');
+        const skipBtn = document.getElementById('skip-btn');
+        const introDaySelector = document.getElementById('intro-day-selector');
+
+        let videoLoaded = false;
+        let startTime = null;
+
+        // SET VIDEO SOURCE BASED ON CURRENT DAY (with fallback to working video)
+        const currentDayConfig = DAY_CONFIG[currentDay];
+        const videoSource = document.getElementById('intro-video-source');
+
+        // List of working videos (those with real content, not 111-byte placeholders)
+        const WORKING_VIDEOS = [
+            'assets/videos/feb-04-charm-day.mp4',      // 14MB
+            'assets/videos/feb-07-rose-day.mp4',       // 4MB
+            'assets/videos/feb-08-propose-day.mp4',    // 19MB
+            'assets/videos/feb-09-chocolate-day.mp4',  // 14MB
+            'assets/videos/feb-12-hug-day.mp4',        // 8MB
+            'assets/videos/feb-13-kiss-day.mp4',       // 9MB
+            'assets/videos/feb-22-singles-day.mp4'     // 71MB
+        ];
+
+        // Check if current day's video is a real video (exists in working videos list)
+        const dayVideoPath = currentDayConfig.video;
+        const isWorkingVideo = WORKING_VIDEOS.includes(dayVideoPath);
+
+        if (isWorkingVideo) {
+            // Use the day's actual video
+            videoSource.src = dayVideoPath;
+            console.log(`Day ${currentDay}: ${currentDayConfig.name} - using day-specific video: ${dayVideoPath}`);
+        } else {
+            // Fallback to a random working video for days with placeholder videos
+            const randomFallback = WORKING_VIDEOS[Math.floor(Math.random() * WORKING_VIDEOS.length)];
+            videoSource.src = randomFallback;
+            console.log(`Day ${currentDay}: ${currentDayConfig.name} - video is placeholder, using fallback: ${randomFallback}`);
+        }
+
+        // Fallback: if video fails, try next working video
+        let fallbackIndex = 0;
+        introVideo.addEventListener('error', function tryFallback() {
+            if (fallbackIndex < WORKING_VIDEOS.length) {
+                console.log(`Video failed, trying fallback: ${WORKING_VIDEOS[fallbackIndex]}`);
+                videoSource.src = WORKING_VIDEOS[fallbackIndex];
+                fallbackIndex++;
+                introVideo.load();
+            }
+        });
+
+        introVideo.load();
+
+        // Initially hide skip button
+        skipBtn.style.display = 'none';
+        skipBtn.style.transition = 'opacity 0.5s ease';
+
+        // Skip to game immediately
+        skipBtn.addEventListener('click', () => {
+            videoIntro.classList.add('fade-out');
+            gameContainer.classList.add('show');
+            topNav.classList.add('show');
+            setTimeout(() => videoIntro.style.display = 'none', 1000);
+            startSpeechAnimation();
+            startDefaultParticles();
+        });
+
+        // Calendar opens via inline onclick in HTML button - no JS needed
+
+        // Show skip button after 3 seconds of playback
+        let skipButtonShown = false;
+        introVideo.addEventListener('timeupdate', () => {
+            if (!skipButtonShown && introVideo.currentTime >= 3) {
+                skipBtn.style.display = 'block';
+                skipBtn.style.opacity = '0';
+                setTimeout(() => {
+                    skipBtn.style.opacity = '1';
+                }, 50);
+                skipButtonShown = true;
+            }
+        });
+
+        // Initially hide skip button
+        skipBtn.style.display = 'none';
+        skipBtn.style.transition = 'opacity 0.5s ease';
+
+        // Populate intro text with reverse explosion animation
+        function populateIntroText() {
+            const config = DAY_CONFIG[currentDay];
+
+            // Aesthetic title (split into characters)
+            introDayNumber.innerHTML = config.aesthetic.split('').map(char =>
+                `<span>${char === ' ' ? '&nbsp;' : char}</span>`
+            ).join('');
+
+            // Subtitle (split into characters)
+            introDayName.innerHTML = config.subtitle.split('').map(char =>
+                `<span>${char === ' ' ? '&nbsp;' : char}</span>`
+            ).join('');
+
+            // Emoji
+            introDayEmoji.textContent = config.emoji;
+
+            // UPDATE HEADER (Top Center)
+            document.getElementById('intro-header-emoji').textContent = config.emoji;
+            document.getElementById('intro-header-text').textContent = config.name;
+        }
+
+        // CONTINUOUS FALLING STICKERS ANIMATION
+        function startIntroStickers() {
+            const container = document.getElementById('intro-stickers');
+            container.innerHTML = ''; // Clear previous
+            const config = DAY_CONFIG[currentDay];
+            const stickers = [config.emoji, '✨', '💖', '🌸', '💫', '💕'];
+
+            // Create a new sticker every 300ms
+            const interval = setInterval(() => {
+                // Stop if video is hidden
+                if (videoIntro.style.display === 'none') {
+                    clearInterval(interval);
+                    return;
+                }
+
+                const sticker = document.createElement('div');
+                sticker.className = 'falling-sticker';
+                sticker.textContent = stickers[Math.floor(Math.random() * stickers.length)];
+                sticker.style.left = Math.random() * 100 + '%';
+                // Randomize size slightly
+                sticker.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                sticker.style.animationDuration = (Math.random() * 3 + 3) + 's'; // 3-6s fall
+                container.appendChild(sticker);
+
+                // Remove after animation
+                setTimeout(() => sticker.remove(), 6000);
+            }, 300);
+        }
+
+        let videoLoadedPercent = 0;
+        let gameStarted = false;
+
+        // Track video loading progress (for slow internet)
+        introVideo.addEventListener('progress', () => {
+            if (introVideo.buffered.length > 0) {
+                const bufferedEnd = introVideo.buffered.end(introVideo.buffered.length - 1);
+                const duration = introVideo.duration;
+                if (duration > 0) {
+                    videoLoadedPercent = (bufferedEnd / duration) * 100;
+
+                    // Start game when 77% loaded (or fully loaded)
+                    if (videoLoadedPercent >= 77 && !gameStarted) {
+                        gameStarted = true;
+                        startGameSequence();
+                    }
+                }
+            }
+        });
+
+        // Show intro overlay after video metadata loads
+        introVideo.addEventListener('loadedmetadata', () => {
+            if (!videoLoaded) {
+                videoLoaded = true;
+                startTime = Date.now();
+
+                // Populate and show intro text
+                populateIntroText();
+
+                // Start falling stickers
+                startIntroStickers();
+
+                // Show overlay and controls immediately
+                introOverlay.classList.add('show');
+                introControls.classList.add('show');
+
+                // Show skip button only if video > 3 seconds
+                const duration = introVideo.duration || 0;
+                if (duration <= 3) {
+                    skipBtn.style.display = 'none';
+                }
+            }
+        });
+
+        // Start game sequence (called when 77% loaded)
+        function startGameSequence() {
+            const videoDuration = introVideo.duration * 1000 || 3500;
+            const elapsed = startTime ? Date.now() - startTime : 0;
+            const remainingTime = Math.max(0, videoDuration - elapsed);
+            const totalWait = remainingTime + 2000; // + 2 second buffer
+
+            setTimeout(() => {
+                videoIntro.classList.add('fade-out');
+                gameContainer.classList.add('show');
+                topNav.classList.add('show');
+                setTimeout(() => videoIntro.style.display = 'none', 1000);
+                startSpeechAnimation();
+                startDefaultParticles();
+            }, totalWait);
+        }
+
+        // Fallback: Start game when video can play through (100% loaded)
+        introVideo.addEventListener('canplaythrough', () => {
+            if (!gameStarted) {
+                gameStarted = true;
+                startGameSequence();
+            }
+        });
+
+        // Fallback if video fails to load - GO STRAIGHT TO GAME
+        introVideo.addEventListener('error', () => {
+            console.log('Video failed to load, skipping to game...');
+            videoIntro.classList.add('fade-out');
+            gameContainer.classList.add('show');
+            topNav.classList.add('show');
+            setTimeout(() => videoIntro.style.display = 'none', 100);
+            startSpeechAnimation();
+            startDefaultParticles();
+        });
+
+        // If video doesn't start playing within 2 seconds, skip to game
+        setTimeout(() => {
+            if (!videoLoaded && !gameContainer.classList.contains('show')) {
+                console.log('Video timeout, skipping to game...');
+                videoIntro.classList.add('fade-out');
+                gameContainer.classList.add('show');
+                topNav.classList.add('show');
+                setTimeout(() => videoIntro.style.display = 'none', 100);
+                startSpeechAnimation();
+                startDefaultParticles();
+            }
+        }, 2000);
+
+        // Hide loading placeholder when video loads
+        const avatarVideo = document.getElementById('avatar-video');
+        const avatarVideoContainer = document.getElementById('avatar-video-container');
+
+        avatarVideo.addEventListener('loadeddata', () => {
+            const placeholder = document.querySelector('.loading-placeholder');
+            if (placeholder) placeholder.style.display = 'none';
+        });
+
+        // CONTINUOUS DEFAULT PARTICLES
+        const defaultParticlesContainer = document.getElementById('default-particles');
+
+        function startDefaultParticles() {
+            setInterval(() => {
+                createDefaultParticle();
+            }, 200);
+        }
+
+        function createDefaultParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'default-particle';
+            particle.textContent = DEFAULT_EMOJIS[Math.floor(Math.random() * DEFAULT_EMOJIS.length)];
+
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.animationDuration = (4 + Math.random() * 4) + 's';
+            particle.style.animationDelay = Math.random() * 2 + 's';
+
+            defaultParticlesContainer.appendChild(particle);
+            setTimeout(() => particle.remove(), 10000);
+        }
+
+        // RESPONSIVE PARTICLES
+        const responsiveParticlesContainer = document.getElementById('responsive-particles');
+
+        function triggerResponsiveParticles(emojis, count) {
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'responsive-particle';
+                    particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+                    particle.style.left = (10 + Math.random() * 80) + 'vw';
+                    particle.style.top = (10 + Math.random() * 30) + 'vh';
+
+                    responsiveParticlesContainer.appendChild(particle);
+                    setTimeout(() => particle.remove(), 500);
+                }, i * 15);
+            }
+        }
+
+        // GAME ELEMENTS
+        const yesBtn = document.getElementById('yes-btn');
+        const noBtn = document.getElementById('no-btn');
+        const questionText = document.getElementById('question-text');
+        const subtext = document.getElementById('subtext');
+        const speechBubble = document.getElementById('speech-bubble');
+        const speechText = document.getElementById('speech-text');
+        const expressionContainer = document.getElementById('expression-container');
+        const successScreen = document.getElementById('success-screen');
+
+        let noClickCount = 0;
+        let escapeDistance = 150;
+        let canClickNo = true;
+
+        // SEDUCTIVE PICKUP LINES - 30 per day (themed to each celebration)
+        const PICKUP_LINES = {
+            1: [ // Self Love Day
+                "Love yourself first... then let me love you second 💋",
+                "You're already perfect, but I could make you feel even better 😏",
+                "Self-love is great, but have you tried my love? 🔥",
+                "You deserve the world... starting with me tonight 💕",
+                "Treat yourself... to me 😈",
+                "You're a whole snack, and I'm starving 🍑",
+                "Self-care? Let me take care of you instead 💋",
+                "You're glowing... but I could make you shine brighter 🌟",
+                "Love yourself enough to say yes to me 😘",
+                "You're the main character... I want to be your love interest 🎬",
+                "Be selfish... choose me 💝",
+                "You're already a 10, but together we'd be infinity ♾️",
+                "Self-love is cute, but our love would be legendary 🔥",
+                "You're worth it... and so am I 😏",
+                "Let me worship you the way you deserve 👑",
+                "You're your own soulmate, but I want in too 💞",
+                "Self-love? How about self plus me love? 😈",
+                "You're the whole package... let me unwrap you 🎁",
+                "Love yourself, but save some love for me 💋",
+                "You're royalty... let me be your throne 👑",
+                "Self-appreciation? I appreciate every inch of you 😍",
+                "You're already winning, but I'm the grand prize 🏆",
+                "Love yourself loudly... love me quietly 🤫",
+                "You're the star... let me be your universe 🌌",
+                "Self-love is power, but our love is electricity ⚡",
+                "You're whole on your own... but two is more fun 😏",
+                "Loving yourself? Great. Now love us 💕",
+                "You're enough... but together we're everything 💝",
+                "Self-love brought you here... say yes to more 🔥",
+                "You deserve the best... that's me, by the way 😘"
+            ],
+            7: [ // Rose Day
+                "I'd give you roses, but you're already a garden of temptation 🌹",
+                "Roses are red, and so are my intentions 😈",
+                "Every rose has thorns, but I'll handle you gently 💋",
+                "You smell better than a thousand roses 🌹",
+                "I'd plant a rose for every dirty thought I have about you... it'd be a forest 🔥",
+                "Roses wilt, but my desire for you is eternal 💕",
+                "Red roses for passion... and I'm very passionate about you 😏",
+                "You're the rose everyone wants to pick 🌹",
+                "I'd be your rose garden's most devoted admirer 💋",
+                "Roses are cliché, but you're extraordinary 🔥",
+                "Every petal falls for you, just like I did 🥀",
+                "You're more intoxicating than rose perfume 💕",
+                "I'd crawl through thorns just to reach you 🌹",
+                "Red like roses, hot like fire, you're my only desire 🔥",
+                "Roses represent love... I represent action 😈",
+                "You're not just a rose, you're the whole garden 💋",
+                "I'd give you roses every day... and myself every night 😏",
+                "Roses fade, but what I'd do to you is unforgettable 🔥",
+                "You're rarer than a blue rose, and twice as captivating 💙",
+                "A rose by any other name... still wouldn't be as hot as you 🌹",
+                "Let me be the stem that holds you up 💕",
+                "You bloom where you're planted... plant yourself in my arms 😘",
+                "Roses whisper romance, but I want to scream your name 🔥",
+                "I'd water your garden... if you know what I mean 😈",
+                "You're the rose I've been searching for 🌹",
+                "Delicate like a petal, but I know you can handle me 💋",
+                "A single rose says 'I love you'... I brought 30 😏",
+                "You're florally inclined to be mine 🌹",
+                "Roses are romantic, but I'm ready to get real 🔥",
+                "Let me be the rose that never leaves your side 💕"
+            ],
+            8: [ // Propose Day
+                "I'm not asking... I'm begging 💍",
+                "Say yes and I'll make every night feel like the first time 🔥",
+                "I'm on my knees... but not just for this proposal 😈",
+                "Will you be mine? Your body's already saying yes 💋",
+                "One word and I'm yours... completely 💍",
+                "I'd put a ring on every finger if it meant you'd say yes 💎",
+                "Marry my soul... date my body 😏",
+                "I'm proposing more than just commitment 🔥",
+                "Say yes and unlock a lifetime of passion 💋",
+                "I'm asking nicely now... later I won't be so gentle 😈",
+                "You + Me = Forever with benefits 💍",
+                "I want you legally, emotionally, and definitely physically 🔥",
+                "Will you accept my heart? My body comes included 💋",
+                "I'm not just proposing love... I'm proposing everything 💕",
+                "Say yes to the dress... and to undressing later 😏",
+                "Forever sounds long enough to do everything I'm imagining 🔥",
+                "I'd propose a thousand times for one night with you 💍",
+                "My proposal: eternal romance with a side of spice 😈",
+                "I want your hand... and the rest of you too 💋",
+                "Be mine officially... so I can make it official in private 🔥",
+                "I'm asking for forever... starting tonight 💕",
+                "Will you? Please? I'll make it worth your while 😏",
+                "One ring, infinite possibilities 💍",
+                "I'm down on one knee, but I'd get on both for you 😈",
+                "Say yes and I'll spend forever proving you right 💋",
+                "Proposing my love, my loyalty, and my late nights 🔥",
+                "I want you for breakfast, lunch, dinner, and forever 💕",
+                "Be my answer to everything 💍",
+                "I'm proposing a partnership... with extensive benefits 😏",
+                "Yes is just three letters... say them and change our lives 🔥"
+            ],
+            9: [ // Chocolate Day
+                "I'm sweeter than chocolate, want a taste? 🍫",
+                "Chocolate melts... so will you when I'm done 🔥",
+                "Dark chocolate, milk chocolate, or me? Choose wisely 😏",
+                "I'd drizzle chocolate on you and... you know the rest 💋",
+                "You're more addictive than any chocolate 🍫",
+                "Let me be your sweetest temptation 😈",
+                "Chocolate is temporary, this pleasure is forever 🔥",
+                "I come in all flavors... want to try them all? 💋",
+                "You're the sugar rush I never want to end 🍫",
+                "Forget the box of chocolates, unwrap me instead 😏",
+                "I'd cover you in chocolate and take my time 🔥",
+                "Chocolate releases endorphins... so do I 💋",
+                "You look like dessert... and I'm hungry 🍫",
+                "Sweet like chocolate, but I bite 😈",
+                "Let me melt in your mouth, not in your hands 🔥",
+                "I'm the chocolate you didn't know you needed 💕",
+                "Chocolate for the sweet tooth, me for everything else 😏",
+                "I'd be your guilty pleasure any day 🍫",
+                "Dark, rich, and completely irresistible... that's me 💋",
+                "Dip me in chocolate and call it a treat 🔥",
+                "You're sweeter than my wildest chocolate dreams 🍫",
+                "I'd feed you chocolate in bed... among other things 😈",
+                "Cocoa has nothing on the chemistry between us 💕",
+                "Be my chocolate kiss 💋",
+                "I melt for you like chocolate in summer 🔥",
+                "Forget Valentine's chocolates, I'm the real gift 🍫",
+                "Sweet, sinful, and ready to be devoured 😏",
+                "I'd be your truffle, your bonbon, your everything 💋",
+                "Chocolate therapy? Let me be your therapist 🔥",
+                "One bite of this and you'll forget all other chocolates 🍫"
+            ],
+            12: [ // Hug Day
+                "I want to hug you... and never let go of what comes next 🤗",
+                "My hugs come with benefits 💋",
+                "Let me wrap around you like I was made for it 🔥",
+                "A hug from me? That's just the preview 😏",
+                "I'd hold you so tight, you'd feel me for days 🤗",
+                "Hugging is innocent... what follows isn't 😈",
+                "Let me be your full-body experience 💋",
+                "My arms around you is where you belong 🔥",
+                "I give hugs that lead to more 🤗",
+                "Wrap yourself in me like a warm blanket 💕",
+                "My hugs have a reputation... want to find out why? 😏",
+                "I'd squeeze you until you beg for more 🔥",
+                "A hug is just two bodies testing compatibility 💋",
+                "Let me embrace every inch of you 🤗",
+                "I don't just hug... I claim 😈",
+                "My warmth plus your body equals magic 🔥",
+                "I'd hold you like you're the last person on earth 💕",
+                "Hugs are my love language... along with other things 😏",
+                "Let me pull you close and never pull away 🤗",
+                "I'd cuddle you into submission 💋",
+                "A hug from me is a full sensory experience 🔥",
+                "Let me wrap you up and unwrap you later 😈",
+                "I want to feel your heartbeat against mine 💕",
+                "My arms were designed to hold you 🤗",
+                "One hug and you'll never want to leave 💋",
+                "I'll keep you warm in ways blankets can't 🔥",
+                "Let me be your safe space... and your wild space 😏",
+                "I hug with my whole body... and soul 💕",
+                "Come here... I've been waiting to hold you 🤗",
+                "My embrace is where you need to be 🔥"
+            ],
+            13: [ // Kiss Day
+                "One kiss and you'll forget your own name 💋",
+                "I don't just kiss... I devour 🔥",
+                "My lips have been waiting for yours 💋",
+                "Let me kiss you everywhere that counts 😈",
+                "I kiss like it's going out of style 🔥",
+                "One kiss to start... a thousand to finish 💋",
+                "I want to taste every inch of your lips 😏",
+                "My kisses leave marks... in all the right places 🔥",
+                "Let me kiss you until you can't breathe 💋",
+                "I kiss slow, deep, and unforgettable 😈",
+                "Your lips + my lips = history 🔥",
+                "I'd kiss you speechless 💋",
+                "One kiss and you're mine forever 💕",
+                "I kiss like I mean it... because I do 😏",
+                "Let me explore you, starting with your lips 🔥",
+                "I've been told I'm an excellent kisser... verify? 💋",
+                "My kisses come with a warning label 😈",
+                "Kiss me like you'll never see me again 🔥",
+                "I want to kiss you until sunrise 💋",
+                "Soft kisses, hard kisses, I do both 😏",
+                "Let me leave my signature on your lips 🔥",
+                "One kiss to remember, a lifetime to repeat 💋",
+                "I kiss with intent... and the intent is you 😈",
+                "My lips are lonely without yours 💕",
+                "I'd kiss you in ways you've never been kissed 🔥",
+                "Let me taste your yes 💋",
+                "Every kiss is a promise of what's to come 😏",
+                "I want to kiss you until we both forget time 🔥",
+                "My kisses are addictive... consider yourself warned 💋",
+                "One kiss. That's all I need to start 😈"
+            ],
+            14: [ // Valentine's Day
+                "Be my Valentine... and my everything else 💕",
+                "Tonight, you're my Valentine... and my fantasy 🔥",
+                "Valentine's is just an excuse to love you harder 💋",
+                "I want to celebrate you in every possible way 😈",
+                "You're the Valentine I've been dreaming about 💕",
+                "Let me show you what Valentine's passion looks like 🔥",
+                "Be mine tonight, tomorrow, and forever 💋",
+                "Valentine's Day? Every day with you is Valentine's 😏",
+                "I'd be your Valentine in public and in private 🔥",
+                "This Valentine's, I'm giving you all of me 💕",
+                "You + me + Valentine's = unforgettable 💋",
+                "I want to write our love story tonight 😈",
+                "Be my Valentine and I'll be your everything 🔥",
+                "This isn't just Valentine's... it's destiny 💕",
+                "Let me love you like Valentine's never ends 💋",
+                "I'd choose you over every Valentine's chocolate 🍫",
+                "My Valentine's wish? You. Just you 😏",
+                "Tonight, love isn't just in the air 🔥",
+                "Be my Valentine and discover what passion means 💋",
+                "I've waited all year to make you mine 💕",
+                "This Valentine's, I'm not holding back 😈",
+                "You're the reason Valentine's exists 🔥",
+                "Be my Valentine and regret nothing 💋",
+                "I want every Valentine's Day to be with you 💕",
+                "Let me celebrate you in ways words can't describe 😏",
+                "Valentine's is about love... I'm about action 🔥",
+                "You're my Valentine, my desire, my everything 💋",
+                "Say yes and make this the best Valentine's ever 💕",
+                "I'd move mountains to be your Valentine 😈",
+                "This Valentine's, let's create our own celebration 🔥"
+            ]
+        };
+
+        // Default pickup lines for days without specific ones
+        const DEFAULT_PICKUP_LINES = [
+            "Is it hot in here, or is it just you? 🔥",
+            "I'm not a photographer, but I can picture us together 📸",
+            "Are you a magician? Because whenever I look at you, everyone else disappears ✨",
+            "Do you believe in love at first sight, or should I walk by again? 😏",
+            "I must be a snowflake, because I've fallen for you ❄️",
+            "Are you a campfire? Because you're hot and I want s'more 🔥",
+            "Is your name Google? Because you have everything I've been searching for 💋",
+            "I'm not drunk, I'm just intoxicated by you 🥴",
+            "If looks could kill, you'd be a weapon of mass destruction 💣",
+            "I'd say God bless you, but it looks like he already did 😇",
+            "Are you a parking ticket? Because you've got 'fine' written all over you 🎫",
+            "Do you have a mirror in your pocket? Because I can see myself in your pants 😈",
+            "I'm lost... can you give me directions to your heart? 💕",
+            "Is your body from McDonald's? Because I'm loving it 🍟",
+            "You must be tired... you've been running through my mind all day 🏃",
+            "I wish I was your phone so you'd be on me all day 📱",
+            "Are you a bank loan? Because you've got my interest 💰",
+            "If you were a vegetable, you'd be a cute-cumber 🥒",
+            "I must be a light switch, because you turn me on 💡",
+            "Are you a time traveler? Because I see you in my future 🔮",
+            "You're like a dictionary... you add meaning to my life 📚",
+            "I'm not saying you're the best, but you're definitely the best 🏆",
+            "Do you have a Band-Aid? I just scraped my knee falling for you 🩹",
+            "If kisses were snowflakes, I'd send you a blizzard 💋",
+            "You're so sweet, you're giving me a toothache 🦷",
+            "I don't have a library card, but can I check you out? 📖",
+            "You must be a beaver, because daaaaam 🦫",
+            "I'd never play hide and seek with you... someone like you is impossible to find 🔍",
+            "Are you a wifi signal? Because I'm feeling a connection 📶",
+            "You're the reason I look down at my phone and smile 😊"
+        ];
+
+        // Get current day's pickup lines or default
+        const currentPickupLines = PICKUP_LINES[currentDay] || DEFAULT_PICKUP_LINES;
+        let pickupLineIndex = 0;
+
+        // Shuffle pickup lines for variety
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        let shuffledPickupLines = shuffleArray(currentPickupLines);
+
+        // SPEECH SYSTEM - Now uses pickup lines
+        const speeches = [
+            "Hey there... I've been wanting to tell you something special! 💕",
+            shuffledPickupLines[0],
+            "Just give me a chance... that's all I ask 🙏",
+            "You make my heart skip a beat... 💓"
+        ];
+
+        let currentSpeech = 0;
+
+        function startSpeechAnimation() {
+            setTimeout(() => typeText(speeches[0]), 500);
+        }
+
+        let typingInterval = null;
+
+        function typeText(text) {
+            if (typingInterval) clearInterval(typingInterval);
+            speechText.textContent = '';
+            speechBubble.style.display = 'block';
+            avatarVideoContainer.classList.add('talking');
+            let index = 0;
+            typingInterval = setInterval(() => {
+                if (index < text.length) {
+                    speechText.textContent += text[index];
+                    index++;
+                } else {
+                    clearInterval(typingInterval);
+                    typingInterval = null;
+                    setTimeout(() => { avatarVideoContainer.classList.remove('talking'); }, 500);
+                }
+            }, 40);
+        }
+
+        // SAD EMOJI RAIN - Reduced count to prevent lag
+        function triggerSadEmojiRain() {
+            const sadEmojis = ['💔', '😢', '😭', '💧', '😔', '😞', '😿', '🥺', '😥', '🖤'];
+
+            // Create 40 sad emojis
+            for (let i = 0; i < 40; i++) {
+                const emoji = document.createElement('div');
+                emoji.className = 'sad-rain-emoji';
+                emoji.textContent = sadEmojis[Math.floor(Math.random() * sadEmojis.length)];
+                emoji.style.cssText = `
+                    position: fixed;
+                    left: ${Math.random() * 100}vw;
+                    top: -50px;
+                    font-size: ${20 + Math.random() * 20}px;
+                    z-index: 9999;
+                    pointer-events: none;
+                    animation: sadFall ${2 + Math.random() * 2}s linear forwards;
+                `;
+                document.body.appendChild(emoji);
+                setTimeout(() => emoji.remove(), 4000);
+            }
+        }
+
+        // Add CSS for sad rain animation
+        const sadRainStyle = document.createElement('style');
+        sadRainStyle.textContent = `
+            @keyframes sadFall {
+                0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+                100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+            }
+            @keyframes hoverFloat {
+            0% { transform: translate(0px, 0px); }
+            10% { transform: translate(-15px, -10px); }
+            20% { transform: translate(20px, 5px); }
+            30% { transform: translate(-10px, 15px); }
+            40% { transform: translate(15px, -15px); }
+            50% { transform: translate(-20px, 0px); }
+            60% { transform: translate(10px, 10px); }
+            70% { transform: translate(-5px, -20px); }
+            80% { transform: translate(18px, -5px); }
+            90% { transform: translate(-12px, 12px); }
+            100% { transform: translate(0px, 0px); }
+        }
+            #no-btn.hovering {
+                animation: hoverFloat 2s ease-in-out infinite;
+            }
+        `;
+        document.head.appendChild(sadRainStyle);
+
+        // NO BUTTON LOGIC - Detects cursor and jumps away!
+
+        // Remove CSS animation, we'll do it with JS
+        noBtn.classList.remove('hovering');
+        noBtn.style.transition = 'all 0.15s ease-out';
+
+        // Track if button has been moved to card
+        let buttonMovedToCard = false;
+
+        // Detect cursor near the No button and make it jump
+        document.addEventListener('mousemove', (e) => {
+            const card = document.querySelector('.glass-card');
+            if (!card || !noBtn) return;
+
+            // Move button to card if not already
+            if (!buttonMovedToCard && noBtn.parentElement !== card) {
+                card.appendChild(noBtn);
+                noBtn.style.position = 'absolute';
+                noBtn.style.left = '50%';
+                noBtn.style.top = '70%';
+                buttonMovedToCard = true;
+            }
+
+            const btnRect = noBtn.getBoundingClientRect();
+            const cardRect = card.getBoundingClientRect();
+
+            // Calculate distance from cursor to button center
+            const btnCenterX = btnRect.left + btnRect.width / 2;
+            const btnCenterY = btnRect.top + btnRect.height / 2;
+            const distance = Math.sqrt(Math.pow(e.clientX - btnCenterX, 2) + Math.pow(e.clientY - btnCenterY, 2));
+
+            // If cursor is within 100px of button, jump away!
+            if (distance < 100) {
+                // Calculate escape direction (opposite of cursor)
+                const escapeX = btnCenterX - e.clientX;
+                const escapeY = btnCenterY - e.clientY;
+
+                // Normalize and multiply by escape distance
+                const magnitude = Math.sqrt(escapeX * escapeX + escapeY * escapeY);
+                const jumpDistance = 80 + Math.random() * 60;
+
+                let newX = (btnRect.left - cardRect.left) + (escapeX / magnitude) * jumpDistance;
+                let newY = (btnRect.top - cardRect.top) + (escapeY / magnitude) * jumpDistance;
+
+                // Keep within card bounds
+                const maxX = card.clientWidth - noBtn.offsetWidth - 10;
+                const maxY = card.clientHeight - noBtn.offsetHeight - 10;
+                newX = Math.max(10, Math.min(newX, maxX));
+                newY = Math.max(10, Math.min(newY, maxY));
+
+                // If stuck at edge, jump to random spot
+                if (newX <= 15 || newX >= maxX - 5 || newY <= 15 || newY >= maxY - 5) {
+                    newX = 20 + Math.random() * (maxX - 40);
+                    newY = 20 + Math.random() * (maxY - 40);
+                }
+
+                noBtn.style.left = newX + 'px';
+                noBtn.style.top = newY + 'px';
+            }
+        });
+
+        // AUTO SAD EMOJI RAIN + PICKUP LINE with proper timing
+        const acceptMessages = [
+            "Just say YES already! 💕",
+            "You can't escape love! 💋",
+            "Accept it... you want me! 😏",
+            "Stop running, accept your feelings! ❤️",
+            "Give in to the love! 💝",
+            "Resistance is futile! 😈",
+            "Your heart knows the answer! 💓",
+            "Just click YES! 🥺",
+            "Why fight it? Accept me! 💕",
+            "Love always wins! ❤️‍🔥"
+        ];
+
+        // Add transparent accept message overlay with explosion animation
+        const acceptOverlay = document.createElement('div');
+        acceptOverlay.id = 'accept-overlay';
+        acceptOverlay.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b9d, #ffd93d, #ff6b9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 20px rgba(255, 100, 150, 0.8)) drop-shadow(0 0 40px rgba(255, 215, 0, 0.5));
+            z-index: 1000;
+            pointer-events: none;
+            font-style: italic;
+            text-align: center;
+            opacity: 0;
+            transition: none;
+            letter-spacing: 2px;
+        `;
+        document.body.appendChild(acceptOverlay);
+
+        // Add explosion animation CSS
+        const explosionStyle = document.createElement('style');
+        explosionStyle.textContent = `
+            @keyframes implodeIn {
+                0% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+                100% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
+            }
+            @keyframes explodeOut {
+                0% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
+                100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(explosionStyle);
+
+        let acceptMsgIndex = 0;
+        let isTypingComplete = true;
+        let pickupLineTimer = null;
+        let acceptMsgTimer = null;
+
+        // Track when typing completes
+        function typeTextWithCallback(text, onComplete) {
+            if (typingInterval) clearInterval(typingInterval);
+            speechText.textContent = '';
+            let index = 0;
+            avatarVideoContainer.classList.add('talking');
+            isTypingComplete = false;
+
+            typingInterval = setInterval(() => {
+                if (index < text.length) {
+                    speechText.textContent += text[index];
+                    index++;
+                } else {
+                    clearInterval(typingInterval);
+                    typingInterval = null;
+                    isTypingComplete = true;
+                    setTimeout(() => { avatarVideoContainer.classList.remove('talking'); }, 500);
+                    if (onComplete) onComplete();
+                }
+            }, 40);
+        }
+
+        // Show accept message with explosion animation
+        function showAcceptMessage() {
+            acceptOverlay.textContent = acceptMessages[acceptMsgIndex];
+            acceptMsgIndex = (acceptMsgIndex + 1) % acceptMessages.length;
+
+            // Implode in animation
+            acceptOverlay.style.animation = 'implodeIn 0.5s ease-out forwards';
+
+            // After 2 seconds, explode out
+            setTimeout(() => {
+                acceptOverlay.style.animation = 'explodeOut 0.5s ease-in forwards';
+            }, 2000);
+        }
+
+        // SIMPLE LOOP: Every 3 seconds - emoji rain + accept message TOGETHER
+        function runLoop() {
+            triggerSadEmojiRain();
+            showAcceptMessage();
+        }
+
+        // Start immediately and repeat every 3 seconds
+        runLoop();
+        setInterval(runLoop, 3000);
+
+        noBtn.addEventListener('click', () => {
+            noClickCount++;
+
+            // Extra SAD EMOJI RAIN on click
+            triggerSadEmojiRain();
+            triggerSadEmojiRain();
+            showExpression('😭', 'sad');
+
+            // Show next pickup line
+            pickupLineIndex = (pickupLineIndex + 1) % shuffledPickupLines.length;
+            if (pickupLineIndex === 0) shuffledPickupLines = shuffleArray(currentPickupLines);
+            typeText(shuffledPickupLines[pickupLineIndex]);
+        });
+
+        function moveNoButton() {
+            const card = document.querySelector('.glass-card');
+
+            // CRITICAL FIX: Move button to be a direct child of card 
+            // so that absolute positioning is relative to the CARD, not the buttons container
+            if (noBtn.parentElement !== card) {
+                card.appendChild(noBtn);
+            }
+
+            // Calculate boundaries relative to the card
+            // Use clientWidth/Height to be safe (excludes borders/scrollbars)
+            const maxX = card.clientWidth - noBtn.offsetWidth - 20; // 20px padding
+            const maxY = card.clientHeight - noBtn.offsetHeight - 20;
+
+            // Generate safe random coordinates
+            const randomX = Math.max(10, Math.random() * maxX);
+            const randomY = Math.max(10, Math.random() * maxY);
+
+            // Apply absolute positioning
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+
+            // Ensure visibility
+            noBtn.style.display = 'inline-block';
+            noBtn.style.zIndex = '1000';
+            noBtn.style.transform = 'scale(1)'; // Reset any scaling
+
+            // FASTER JUMP (Snappier)
+            // 0.35s speed + Elastic Bounce for "fast" feel
+            noBtn.style.transition = 'all 0.35s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+        }
+
+        // YES BUTTON
+        yesBtn.addEventListener('click', () => {
+            showExpression('😍', 'happy');
+            triggerResponsiveParticles(['💕', '💖', '✨', '🌟', '💗', '❤️', '🎉', '💝'], 80);
+
+            typeText("OMG YES! You just made my day! I'm so happy! 💕✨🎊");
+            questionText.textContent = "You Said Yes! 🎉";
+            subtext.textContent = "Thank you so much! 💕";
+
+            yesBtn.style.display = 'none';
+            noBtn.style.display = 'none';
+
+            setTimeout(() => {
+                successScreen.classList.add('show');
+                triggerResponsiveParticles(['💕', '❤️', '💖', '✨', '🌟', '💝', '🎊'], 100);
+            }, 2500);
+        });
+
+
+        function showExpression(emoji, type) {
+            const expr = document.createElement('div');
+            expr.className = `expression-emoji expr-${type}`;
+            expr.textContent = emoji;
+            expressionContainer.appendChild(expr);
+
+            setTimeout(() => expr.remove(), 1800);
+        }
+
+        // Cycle speeches
+        setInterval(() => {
+            if (successScreen.classList.contains('show')) return;
+            currentSpeech = (currentSpeech + 1) % speeches.length;
+            typeText(speeches[currentSpeech]);
+        }, 9000);
+    </script>
 </body>
 
 </html>
